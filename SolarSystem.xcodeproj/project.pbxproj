@@ -14,6 +14,7 @@
 		2FFF1E8E1F19442E00768AB9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FFF1E8C1F19442E00768AB9 /* Main.storyboard */; };
 		2FFF1E901F19442E00768AB9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FFF1E8F1F19442E00768AB9 /* Assets.xcassets */; };
 		2FFF1E931F19442E00768AB9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FFF1E911F19442E00768AB9 /* LaunchScreen.storyboard */; };
+		834C950B1FC13EB1005E15E6 /* GyroScene.scn in Resources */ = {isa = PBXBuildFile; fileRef = 834C950A1FC13EB1005E15E6 /* GyroScene.scn */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		2FFF1E8F1F19442E00768AB9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2FFF1E921F19442E00768AB9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2FFF1E941F19442E00768AB9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		834C950A1FC13EB1005E15E6 /* GyroScene.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = GyroScene.scn; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 		2FFF1E851F19442E00768AB9 /* SolarSystem */ = {
 			isa = PBXGroup;
 			children = (
+				834C950A1FC13EB1005E15E6 /* GyroScene.scn */,
 				2FFF1E861F19442E00768AB9 /* AppDelegate.swift */,
 				2FFF1E881F19442E00768AB9 /* art.scnassets */,
 				2FFF1E8A1F19442E00768AB9 /* ViewController.swift */,
@@ -131,6 +134,7 @@
 				2FFF1E891F19442E00768AB9 /* art.scnassets in Resources */,
 				2FFF1E931F19442E00768AB9 /* LaunchScreen.storyboard in Resources */,
 				2FFF1E901F19442E00768AB9 /* Assets.xcassets in Resources */,
+				834C950B1FC13EB1005E15E6 /* GyroScene.scn in Resources */,
 				2FFF1E8E1F19442E00768AB9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -281,10 +285,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = WJ5RP6XBLX;
+				DEVELOPMENT_TEAM = WMDZ2CQA8K;
 				INFOPLIST_FILE = SolarSystem/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Octopus.SolarSystem;
+				PRODUCT_BUNDLE_IDENTIFIER = Octopus.SolarSystem3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -295,10 +299,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = WJ5RP6XBLX;
+				DEVELOPMENT_TEAM = WMDZ2CQA8K;
 				INFOPLIST_FILE = SolarSystem/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = Octopus.SolarSystem;
+				PRODUCT_BUNDLE_IDENTIFIER = Octopus.SolarSystem3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

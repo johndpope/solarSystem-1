@@ -9,6 +9,9 @@
 import UIKit
 import SceneKit
 import ARKit
+import CoreMotion
+
+
 
 struct Body {
     var name: String!
@@ -41,18 +44,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
     var scene: SCNScene!
+    let moMan = CMMotionManager()
+    var sunNode = SCNNode()
+    var cube:SCNNode?
     
     var bodies = [
-//        Body(name: "mercury", mass: 0.055, period: 0.24, rotationPeriod: 58.65, distance: 0.39, diameter: 0.382, moons: []),
-//        Body(name: "venus", mass: 0.815, period: 0.62, rotationPeriod: 243, distance: 0.72, diameter: 0.949, moons: []),
-//        Body(name: "earth", mass: 1.0, period: 1, rotationPeriod: 1, distance: 1.0, diameter: 1, moons: [
-//                Moon(name: "moon", image: "art.scnassets/moonTexture.jpg")
-//            ]),
-//        Body(name: "mars", mass: 0.107, period: 1.88, rotationPeriod: 1.03, distance: 1.52, diameter: 0.532, moons: []),
-//        Body(name: "jupiter", mass: 318, period: 11.86, rotationPeriod: 0.41, distance: 5.20, diameter: 11.209, moons: []),
-//        Body(name: "saturn", mass: 95, period: 29.46, rotationPeriod: 0.44, distance: 9.54, diameter: 9.44, moons: []),
-//        Body(name: "uranus", mass: 15, period: 84.01, rotationPeriod: 0.72, distance: 19.18, diameter: 4.007, moons: []),
-//        Body(name: "neptune", mass: 17, period: 164.8, rotationPeriod: 0.72, distance: 30.06, diameter: 3.883, moons: [])
         Body(name: "mercury", mass: 0.055, period: 0.24, rotationPeriod: 58.65, distance: 1.0, diameter: 0.382, moons: [], ring: nil),
         Body(name: "venus", mass: 0.815, period: 0.62, rotationPeriod: 243, distance: 1.2, diameter: 0.949, moons: [], ring: nil),
         Body(name: "earth", mass: 1.0, period: 1, rotationPeriod: 1, distance: 1.4, diameter: 1, moons: [
@@ -65,7 +61,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         Body(name: "neptune", mass: 17, period: 164.8, rotationPeriod: 0.72, distance: 3.6, diameter: 3.883, moons: [], ring: nil)
     ]
     
-    var sunNode: SCNNode!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,10 +68,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         scene = SCNScene()
         
         let sunSphere = SCNSphere(radius: 0.3)
-        sunSphere.firstMaterial?.diffuse.contents = UIImage(named:"art.scnassets/sunTexture.jpg")
-        sunNode = SCNNode()
+       // sunSphere.firstMaterial?.diffuse.contents = UIImage(named:"art.scnassets/sunTexture.jpg")
+        
         sunNode.geometry = sunSphere
-        sunNode.addAnimation(spinAnimation(duration: 40), forKey: "spin")
+        sunNode.geometry?.firstMaterial?.fillMode = .lines
+        //sunNode.addAnimation(spinAnimation(duration: 40), forKey: "spin")
         sunNode.position = SCNVector3Make(0, -0.2, -2)
         
         let light = SCNLight()
@@ -99,7 +95,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 //            node.light = light
             
             node.addAnimation(spinAnimation(duration: 3 * body.rotationPeriod), forKey: "spin")
-            
+  
             let rotateAction = SCNAction.rotateAround(center: sunNode.position, radius: 0.5 * body.distance, animationDuration: 10 * body.period)
           
             for moon in body.moons {
@@ -132,11 +128,41 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             scene.rootNode.addChildNode(node)
         }
         
+        self.sceneView.debugOptions = [ARSCNDebugOptions.showWorldOrigin, ARSCNDebugOptions.showFeaturePoints]
+        self.sceneView.showsStatistics = true
+        
         sceneView.delegate = self
         sceneView.scene = scene
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        moMan.deviceMotionUpdateInterval = 1.0/60.0
+        
+        
+        // Create a session configuration
+        let configuration = ARWorldTrackingConfiguration()
+        
+        // Run the view's session
+        sceneView.session.run(configuration)
+        
+//        let frameScene = SCNScene(named: "GyroScene.scn")
+//        cube = frameScene?.rootNode.childNode(withName: "cube",  recursively: true)
+//        scene.rootNode.addChildNode(cube!)
+        moMan.startDeviceMotionUpdates(using: .xArbitraryCorrectedZVertical, to: OperationQueue.main) { [weak self] (motion, error) in
+            if let q = motion?.attitude.quaternion {
+                self?.sunNode.orientation = SCNQuaternion(q.x, q.y, q.z, -q.w)
+            }
+        }
+    }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        moMan.stopDeviceMotionUpdates()
+        
+        // Pause the view's session
+        sceneView.session.pause()
+    }
     
     func spinAnimation(duration: Double) -> CABasicAnimation {
 
@@ -150,22 +176,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         return spin
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        // Create a session configuration
-        let configuration = ARWorldTrackingSessionConfiguration()
-        
-        // Run the view's session
-        sceneView.session.run(configuration)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        // Pause the view's session
-        sceneView.session.pause()
-    }
+
     
     // MARK: - ARSCNViewDelegate
 
