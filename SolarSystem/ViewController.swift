@@ -68,6 +68,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     let moMan = CMMotionManager()
     var sunNode = SCNNode()
     var earth:SCNNode?
+    var camera = SCNCamera()
 
     var currentGesture: ARGesture?
     let cameraNode = SCNNode()
@@ -109,13 +110,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         for body in bodies {
             
             let sphere = SCNSphere(radius: 0.005 * body.diameter)
+             sphere.segmentCount = 30
             sphere.firstMaterial?.diffuse.contents = UIImage(named:"art.scnassets/\(body.name!)Texture.jpg")
             //sphere.firstMaterial?.fillMode = .lines
         
             let node = SCNNode()
-            
             node.name = body.name!
-           
             node.geometry = sphere
             node.rotation = SCNVector4(2,4,0,CGFloat.pi / 4)
             if (node.name != "earth"){
@@ -153,7 +153,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             }
             
             if (node.name == "earth"){
-                earth = node
+              
 
                 guard let virtualObjectScene = SCNScene(named: "art.scnassets/SimpleEarth/EarthPlanet.DAE") else {
                     return
@@ -165,23 +165,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 node.scale = SCNVector3(0.01, 0.01, 0.01) // make huge
 
        
-                let camera = SCNCamera()
-                let pov = SCNNode()
-                pov.camera = camera
-                scene.rootNode.addChildNode(pov)
-                pov.constraints = [SCNLookAtConstraint(target: node)]
-                
-                sceneView.pointOfView = pov
-                sceneView.pointOfView?.addChildNode(node)
-                
-                // make some glowing nodes
-                // x: 0.0, y: 0.0, z: 5.05
-                let zz = GlobeGlowPoint(lat: 0,lon: 0)
-                node.addChildNode(zz.node)
-                // make this one white!
-                zz.node.geometry!.firstMaterial!.diffuse.contents = "whiteGlow-32x32.png"
-                
-                
+//                let camera = SCNCamera()
+//                let pov = SCNNode()
+//                pov.camera = camera
+//                scene.rootNode.addChildNode(pov)
+//                pov.constraints = [SCNLookAtConstraint(target: node)]
+//                sceneView.pointOfView = pov
+//                sceneView.pointOfView?.addChildNode(node)
+                earth = node
+                scene.rootNode.addChildNode(node)
                
             }else{
                 scene.rootNode.addChildNode(node)
@@ -199,7 +191,33 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         
-       
+       // MERGE LOGIC FOR CAMERA FROM https://github.com/dmojdehi/SwiftGlobe
+        
+        // give us some ambient light (to light the rest of the model)
+        let ambientLight = SCNLight()
+        ambientLight.type = .ambient
+        ambientLight.intensity = 20.0 // default is 1000!
+
+        //-----------------------------------
+        // Setup the camera node itself, which chases after the 'cameraGoal' but is always looking at the globe
+        // We use physics to follow the 'camera goal' smoothly
+        // (the user manipulates the goal, not the camera!)
+        // NB: SCNPhysicsBody requires a shape to be affected by the spring.
+        let fakeCameraShape = SCNPhysicsShape(geometry: SCNSphere(radius: 0.001), options: nil)
+        let cameraNodePhysics = SCNPhysicsBody(type: .dynamic, shape: fakeCameraShape)
+        if #available(macOS 10.12, iOS 10.0, tvOS 10.0, *) {
+            cameraNodePhysics.isAffectedByGravity = false
+        }
+        cameraNodePhysics.categoryBitMask = kAffectedBySpring
+        cameraNodePhysics.damping = 2.0
+        //cameraNodePhysics.velocityFactor = SCNVector3(x:0.8, y:0.8, z: 0.8)
+        cameraNode.physicsBody = cameraNodePhysics
+        cameraNode.physicsBody?.allowsResting = false
+        cameraNode.constraints = [ SCNLookAtConstraint(target: earth!) ]
+        cameraNode.light = ambientLight
+        cameraNode.camera = camera
+        sceneView.pointOfView?.addChildNode(cameraNode)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

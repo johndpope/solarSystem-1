@@ -30,10 +30,19 @@ extension ViewController:CLLocationManagerDelegate{
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-         let location = locations.last!
-        currentLocation = location
-       
-        print( "Lat: " + coordinateFormatter.string(from: location.coordinate.latitude as NSNumber)! + ", Lon: " + coordinateFormatter.string(from: location.coordinate.longitude as NSNumber)!)
+        if let location = locations.last{
+            currentLocation = location
+            
+            print( "Lat: " + coordinateFormatter.string(from: location.coordinate.latitude as NSNumber)! + ", Lon: " + coordinateFormatter.string(from: location.coordinate.longitude as NSNumber)!)
+            
+            // x: 0.0, y: 0.0, z: 5.05
+            let zz = GlobeGlowPoint(lat: location.coordinate.latitude,lon: location.coordinate.longitude)
+            // make this one white!
+            zz.node.geometry!.firstMaterial!.diffuse.contents = "whiteGlow-32x32.png"
+            earth?.addChildNode(zz.node)
+            
+        }
+        
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
