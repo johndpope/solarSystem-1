@@ -20,6 +20,10 @@
 		83D68AB61FC2132200C5405C /* SkyMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D68AB51FC2132100C5405C /* SkyMapViewController.swift */; };
 		83D68AB81FC2270B00C5405C /* MyCameraCoordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D68AB71FC2270B00C5405C /* MyCameraCoordinates.swift */; };
 		83D68ABF1FC228A700C5405C /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 83D68ABE1FC228A700C5405C /* art.scnassets */; };
+		83D68AC51FC238A100C5405C /* yellowGlow-32x32.png in Resources */ = {isa = PBXBuildFile; fileRef = 83D68AC31FC238A000C5405C /* yellowGlow-32x32.png */; };
+		83D68AC61FC238A100C5405C /* whiteGlow-32x32.png in Resources */ = {isa = PBXBuildFile; fileRef = 83D68AC41FC238A000C5405C /* whiteGlow-32x32.png */; };
+		83D68AC81FC238EE00C5405C /* SwiftGlobe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D68AC71FC238ED00C5405C /* SwiftGlobe.swift */; };
+		83D68ACA1FC23BEC00C5405C /* ViewController+CoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D68AC91FC23BEC00C5405C /* ViewController+CoreLocation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +43,10 @@
 		83D68AB51FC2132100C5405C /* SkyMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkyMapViewController.swift; sourceTree = "<group>"; };
 		83D68AB71FC2270B00C5405C /* MyCameraCoordinates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCameraCoordinates.swift; sourceTree = "<group>"; };
 		83D68ABE1FC228A700C5405C /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
+		83D68AC31FC238A000C5405C /* yellowGlow-32x32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "yellowGlow-32x32.png"; sourceTree = "<group>"; };
+		83D68AC41FC238A000C5405C /* whiteGlow-32x32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteGlow-32x32.png"; sourceTree = "<group>"; };
+		83D68AC71FC238ED00C5405C /* SwiftGlobe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftGlobe.swift; sourceTree = "<group>"; };
+		83D68AC91FC23BEC00C5405C /* ViewController+CoreLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+CoreLocation.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +79,8 @@
 		2FFF1E851F19442E00768AB9 /* SolarSystem */ = {
 			isa = PBXGroup;
 			children = (
+				83D68AC71FC238ED00C5405C /* SwiftGlobe.swift */,
+				83D68AC21FC238A000C5405C /* Resources */,
 				83D68ABE1FC228A700C5405C /* art.scnassets */,
 				83D68AAA1FC1EEC500C5405C /* Extras */,
 				2FFF1E861F19442E00768AB9 /* AppDelegate.swift */,
@@ -81,6 +91,7 @@
 				834C95121FC1EA70005E15E6 /* SceneKitDemo.swift */,
 				2FFF1E8A1F19442E00768AB9 /* ViewController.swift */,
 				83D68AB51FC2132100C5405C /* SkyMapViewController.swift */,
+				83D68AC91FC23BEC00C5405C /* ViewController+CoreLocation.swift */,
 				83D68AA81FC1EE7000C5405C /* ViewController+Gestures.swift */,
 			);
 			path = SolarSystem;
@@ -96,6 +107,15 @@
 				83D68AAD1FC1EEC500C5405C /* Extensions.swift */,
 			);
 			path = Extras;
+			sourceTree = "<group>";
+		};
+		83D68AC21FC238A000C5405C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				83D68AC31FC238A000C5405C /* yellowGlow-32x32.png */,
+				83D68AC41FC238A000C5405C /* whiteGlow-32x32.png */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -157,9 +177,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FFF1E931F19442E00768AB9 /* LaunchScreen.storyboard in Resources */,
+				83D68AC51FC238A100C5405C /* yellowGlow-32x32.png in Resources */,
 				83D68ABF1FC228A700C5405C /* art.scnassets in Resources */,
 				2FFF1E901F19442E00768AB9 /* Assets.xcassets in Resources */,
 				834C950B1FC13EB1005E15E6 /* GyroScene.scn in Resources */,
+				83D68AC61FC238A100C5405C /* whiteGlow-32x32.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,9 +193,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				83D68AA71FC1EBCE00C5405C /* ViewController.swift in Sources */,
+				83D68AC81FC238EE00C5405C /* SwiftGlobe.swift in Sources */,
 				83D68AB61FC2132200C5405C /* SkyMapViewController.swift in Sources */,
 				83D68AB81FC2270B00C5405C /* MyCameraCoordinates.swift in Sources */,
 				83D68AAE1FC1EEC500C5405C /* ARGesture.swift in Sources */,
+				83D68ACA1FC23BEC00C5405C /* ViewController+CoreLocation.swift in Sources */,
 				83D68AB01FC1EEC500C5405C /* Extensions.swift in Sources */,
 				83D68AA91FC1EE7000C5405C /* ViewController+Gestures.swift in Sources */,
 				83D68AAF1FC1EEC500C5405C /* SCNNode+Extension.swift in Sources */,

@@ -10,7 +10,7 @@ import UIKit
 import SceneKit
 import ARKit
 import CoreMotion
-
+import CoreLocation
 
 
 struct Body {
@@ -60,6 +60,8 @@ extension ARSCNView {
 }
 
 class ViewController: UIViewController, ARSCNViewDelegate {
+    lazy var locationManager = CLLocationManager()
+    var currentLocation:CLLocation?
     var camCoords = MyCameraCoordinates()
     var sceneView = ARSCNView(frame:.zero)
     var scene: SCNScene!
@@ -160,10 +162,27 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                     child.geometry?.firstMaterial?.lightingModel = .physicallyBased
                     node.addChildNode(child)
                 }
-                node.scale = SCNVector3(0.01, 0.01, 0.01)
-                //placeNodeInfrontOfCamera(node:earth!)
-                // sceneView.pointOfView?.addChildNode(earth!)
-                scene.rootNode.addChildNode(node)
+                node.scale = SCNVector3(0.01, 0.01, 0.01) // make huge
+
+       
+                let camera = SCNCamera()
+                let pov = SCNNode()
+                pov.camera = camera
+                scene.rootNode.addChildNode(pov)
+                pov.constraints = [SCNLookAtConstraint(target: node)]
+                
+                sceneView.pointOfView = pov
+                sceneView.pointOfView?.addChildNode(node)
+                
+                // make some glowing nodes
+                // x: 0.0, y: 0.0, z: 5.05
+                let zz = GlobeGlowPoint(lat: 0,lon: 0)
+                node.addChildNode(zz.node)
+                // make this one white!
+                zz.node.geometry!.firstMaterial!.diffuse.contents = "whiteGlow-32x32.png"
+                
+                
+               
             }else{
                 scene.rootNode.addChildNode(node)
             }
@@ -175,6 +194,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.showsStatistics = true
         sceneView.delegate = self
         sceneView.scene = scene
+        
+        
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        
+       
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -223,11 +248,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         //let nodePosition = node.presentation.worldPosition
         
         
-        let nodePosition = node.presentation.position
-        print("x:\(nodePosition.x) y:\(nodePosition.y) z:\(nodePosition.z)")
-        node.position = SCNVector3(x: nodePosition.x, y: nodePosition.y+50, z: nodePosition.z+80)
+       // let nodePosition = node.presentation.position
+      //  print("x:\(nodePosition.x) y:\(nodePosition.y) z:\(nodePosition.z)")
+        //node.position = SCNVector3(x: nodePosition.x, y: nodePosition.y+5000, z: nodePosition.z+80000)
         
-       // sceneView.pointOfView = node
+      //  sceneView.pointOfView = node
 
     }
     
@@ -269,6 +294,19 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let pointOfView = self.sceneView.pointOfView
         node.simdPosition = pointOfView!.simdPosition + (pointOfView?.simdWorldFront)! * 2
         sceneView.scene.rootNode.addChildNode(node)
+    }
+    
+    func constraints(target: SCNNode) -> SCNConstraint {
+        let constraint = SCNLookAtConstraint(target: target)
+        constraint.isGimbalLockEnabled = true
+        return constraint
+    }
+    
+    func setupCamera(constraint: SCNConstraint) {
+        let cameraNode = SCNNode()
+        let camera = SCNCamera()
+        cameraNode.camera = camera
+        cameraNode.constraints = [constraint]
     }
 }
 
