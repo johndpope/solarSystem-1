@@ -60,7 +60,7 @@ extension ARSCNView {
 }
 
 class ViewController: UIViewController, ARSCNViewDelegate {
-
+    var camCoords = MyCameraCoordinates()
     var sceneView = ARSCNView(frame:.zero)
     var scene: SCNScene!
     let moMan = CMMotionManager()
@@ -68,13 +68,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var earth:SCNNode?
 
     var currentGesture: ARGesture?
-    let camera = SCNCamera()
     let cameraNode = SCNNode()
     
     var bodies = [
         Body(name: "mercury", mass: 0.055, period: 0.24, rotationPeriod: 58.65, distance: 1.0, diameter: 0.382, moons: [], ring: nil),
         Body(name: "venus", mass: 0.815, period: 0.62, rotationPeriod: 243, distance: 1.2, diameter: 0.949, moons: [], ring: nil),
-        Body(name: "earth", mass: 1.0, period: 1, rotationPeriod: 1, distance: 1.4, diameter: 1, moons: [
+        Body(name: "earth", mass: 1.0, period: 1, rotationPeriod: 1, distance: 1.4, diameter: 10, moons: [
             Moon(name: "moon", image: "art.scnassets/moonTexture.jpg", period: 0.5, size: 0.0025, distance: 0.03)
             ], ring: nil),
         Body(name: "mars", mass: 0.107, period: 1.88, rotationPeriod: 1.03, distance: 2.0, diameter: 0.532, moons: [], ring: nil),
@@ -91,7 +90,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         self.view.addSubview(sceneView)
         sceneView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
         sceneView.frame = self.view.bounds
-        sceneView.setup()
+        //sceneView.setup()
         
         scene = SCNScene()
         
@@ -103,16 +102,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sunNode.position = SCNVector3Make(0, -0.2, -2)
         //sunNode.isGimbalLockEnabled = true
         scene.rootNode.addChildNode(sunNode)
-        
-    
-        // camera
-        camera.automaticallyAdjustsZRange = true
-        cameraNode.name = "camra"
-        cameraNode.camera = camera
-        cameraNode.position = SCNVector3(x: -3.0, y: 3.0, z: 3.0)
-        scene.rootNode.addChildNode(cameraNode)
-        
-        
+
         
         for body in bodies {
             
@@ -162,18 +152,27 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             
             if (node.name == "earth"){
                 earth = node
-                //https://stackoverflow.com/questions/46721294/how-to-update-the-pointofview-in-arkit
-                 sceneView.pointOfView?.addChildNode(node)
+
+                guard let virtualObjectScene = SCNScene(named: "art.scnassets/SimpleEarth/EarthPlanet.DAE") else {
+                    return
+                }
+                for child in virtualObjectScene.rootNode.childNodes {
+                    child.geometry?.firstMaterial?.lightingModel = .physicallyBased
+                    node.addChildNode(child)
+                }
+                node.scale = SCNVector3(0.01, 0.01, 0.01)
+                //placeNodeInfrontOfCamera(node:earth!)
+                // sceneView.pointOfView?.addChildNode(earth!)
+                scene.rootNode.addChildNode(node)
             }else{
-                 scene.rootNode.addChildNode(node)
+                scene.rootNode.addChildNode(node)
             }
             
            
         }
         
-      //  self.sceneView.debugOptions = [.showCreases,.showSkeletons,.showWireframe,.showPhysicsFields,.showPhysicsShapes,.showConstraints, .showLightExtents, ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
-        self.sceneView.showsStatistics = true
-        
+        self.sceneView.debugOptions = [.showPhysicsShapes,.showConstraints, .showLightExtents, ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
+        sceneView.showsStatistics = true
         sceneView.delegate = self
         sceneView.scene = scene
     }
@@ -217,13 +216,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-        //lockCameraOnNode(node: earth!)
+        lockCameraOnNode(node: earth!)
     }
 
     func lockCameraOnNode(node: SCNNode){
-        let nodePosition = node.presentation.worldPosition
+        //let nodePosition = node.presentation.worldPosition
+        
+        
+        let nodePosition = node.presentation.position
         print("x:\(nodePosition.x) y:\(nodePosition.y) z:\(nodePosition.z)")
-        sceneView.pointOfView = node
+        node.position = SCNVector3(x: nodePosition.x, y: nodePosition.y+50, z: nodePosition.z+80)
+        
+       // sceneView.pointOfView = node
 
     }
     
@@ -244,6 +248,27 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func sessionInterruptionEnded(_ session: ARSession) {
         // Reset tracking and/or remove existing anchors if consistent tracking is required
         
+    }
+    
+    func addNodeToSceneView(node:SCNNode,at position: SCNVector3){
+        node.position = position
+        sceneView.scene.rootNode.addChildNode(node)
+    }
+    
+    func addNodeToPointOfView(node:SCNNode){
+        self.sceneView.pointOfView?.addChildNode(node)
+    }
+    
+    func addNodeAtCameraPosition(node:SCNNode){
+        let cc = camCoords.getCameraCoordinates(sceneView: sceneView)
+        node.position = SCNVector3(cc.x, cc.y, cc.z)
+        sceneView.scene.rootNode.addChildNode(node)
+    }
+    
+    func placeNodeInfrontOfCamera(node:SCNNode) {
+        let pointOfView = self.sceneView.pointOfView
+        node.simdPosition = pointOfView!.simdPosition + (pointOfView?.simdWorldFront)! * 2
+        sceneView.scene.rootNode.addChildNode(node)
     }
 }
 
