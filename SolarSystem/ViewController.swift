@@ -40,6 +40,25 @@ struct Ring {
     var image: String!
 }
 
+extension ARSCNView {
+    
+    func setup() {
+        antialiasingMode = .multisampling4X
+        automaticallyUpdatesLighting = false
+        
+        preferredFramesPerSecond = 60
+        contentScaleFactor = 1.3
+        
+        if let camera = pointOfView?.camera {
+            camera.wantsHDR = true
+            camera.wantsExposureAdaptation = true
+            camera.exposureOffset = -1
+            camera.minimumExposure = -1
+            camera.maximumExposure = 3
+        }
+    }
+}
+
 class ViewController: UIViewController, ARSCNViewDelegate {
 
     var sceneView = ARSCNView(frame:.zero)
@@ -55,7 +74,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var bodies = [
         Body(name: "mercury", mass: 0.055, period: 0.24, rotationPeriod: 58.65, distance: 1.0, diameter: 0.382, moons: [], ring: nil),
         Body(name: "venus", mass: 0.815, period: 0.62, rotationPeriod: 243, distance: 1.2, diameter: 0.949, moons: [], ring: nil),
-        Body(name: "earth", mass: 1.0, period: 1, rotationPeriod: 1, distance: 1.4, diameter: 10, moons: [
+        Body(name: "earth", mass: 1.0, period: 1, rotationPeriod: 1, distance: 1.4, diameter: 1, moons: [
             Moon(name: "moon", image: "art.scnassets/moonTexture.jpg", period: 0.5, size: 0.0025, distance: 0.03)
             ], ring: nil),
         Body(name: "mars", mass: 0.107, period: 1.88, rotationPeriod: 1.03, distance: 2.0, diameter: 0.532, moons: [], ring: nil),
@@ -72,6 +91,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         self.view.addSubview(sceneView)
         sceneView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
         sceneView.frame = self.view.bounds
+        sceneView.setup()
         
         scene = SCNScene()
         
@@ -79,47 +99,38 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
         sunNode.geometry = sunSphere
         sunNode.geometry?.firstMaterial?.fillMode = .lines
-        //sunNode.addAnimation(spinAnimation(duration: 40), forKey: "spin")
+        sunNode.addAnimation(spinAnimation(duration: 40), forKey: "spin")
         sunNode.position = SCNVector3Make(0, -0.2, -2)
+        //sunNode.isGimbalLockEnabled = true
         scene.rootNode.addChildNode(sunNode)
         
     
+        // camera
+        camera.automaticallyAdjustsZRange = true
+        cameraNode.name = "camra"
+        cameraNode.camera = camera
+        cameraNode.position = SCNVector3(x: -3.0, y: 3.0, z: 3.0)
+        scene.rootNode.addChildNode(cameraNode)
+        
+        
         
         for body in bodies {
             
             let sphere = SCNSphere(radius: 0.005 * body.diameter)
-            //sphere.firstMaterial?.diffuse.contents = UIImage(named:"art.scnassets/\(body.name!)Texture.jpg")
-            sphere.firstMaterial?.fillMode = .lines
+            sphere.firstMaterial?.diffuse.contents = UIImage(named:"art.scnassets/\(body.name!)Texture.jpg")
+            //sphere.firstMaterial?.fillMode = .lines
         
             let node = SCNNode()
             
             node.name = body.name!
-            if (node.name == "earth"){
-                earth = node
-                
-                let cameraRange = 120.0
-                camera.xFov = 800.0 / cameraRange
-                camera.yFov = 800.0 / cameraRange
-                camera.automaticallyAdjustsZRange = true
-                
-                
-                cameraNode.name = "camra"
-                cameraNode.camera = camera
-                cameraNode.position = SCNVector3(x: -3.0, y: 3.0, z: 3.0)
-                let cameraConstraint = SCNLookAtConstraint(target: earth)
-                cameraConstraint.isGimbalLockEnabled = true
-                cameraNode.constraints = [cameraConstraint]
-                scene.rootNode.addChildNode(cameraNode)
-        
-            }
+           
             node.geometry = sphere
             node.rotation = SCNVector4(2,4,0,CGFloat.pi / 4)
-            
-//            node.pivot = SCNMatrix4Identity
-//            node.light = light
-            
-            node.addAnimation(spinAnimation(duration: 3 * body.rotationPeriod), forKey: "spin")
-  
+            if (node.name != "earth"){
+                node.addAnimation(spinAnimation(duration: 3 * body.rotationPeriod), forKey: "spin")
+                
+            }
+          
             let rotateAction = SCNAction.rotateAround(center: sunNode.position, radius: 0.5 * body.distance, animationDuration: 10 * body.period)
           
             for moon in body.moons {
@@ -149,10 +160,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 node.addChildNode(ringNode)
             }
             
-            scene.rootNode.addChildNode(node)
+            if (node.name == "earth"){
+                earth = node
+                //https://stackoverflow.com/questions/46721294/how-to-update-the-pointofview-in-arkit
+                 sceneView.pointOfView?.addChildNode(node)
+            }else{
+                 scene.rootNode.addChildNode(node)
+            }
+            
+           
         }
         
-        self.sceneView.debugOptions = [.showCreases,.showSkeletons,.showWireframe,.showPhysicsFields,.showPhysicsShapes,.showConstraints, .showLightExtents, ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
+      //  self.sceneView.debugOptions = [.showCreases,.showSkeletons,.showWireframe,.showPhysicsFields,.showPhysicsShapes,.showConstraints, .showLightExtents, ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
         self.sceneView.showsStatistics = true
         
         sceneView.delegate = self
@@ -172,7 +191,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
         moMan.startDeviceMotionUpdates(using: .xArbitraryCorrectedZVertical, to: OperationQueue.main) { [weak self] (motion, error) in
             if let q = motion?.attitude.quaternion {
-                self?.sunNode.orientation = SCNQuaternion(q.x, q.y, q.z, -q.w)
+                self?.earth?.orientation = SCNQuaternion(q.x, q.y, q.z, -q.w)
             }
         }
     }
@@ -198,12 +217,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-        lockCameraOnNode(node: earth!)
+        //lockCameraOnNode(node: earth!)
     }
 
     func lockCameraOnNode(node: SCNNode){
-        let nodePosition = node.presentation.position
-        cameraNode.position = SCNVector3(x: nodePosition.x, y: nodePosition.y+5, z: nodePosition.z+8)
+        let nodePosition = node.presentation.worldPosition
+        print("x:\(nodePosition.x) y:\(nodePosition.y) z:\(nodePosition.z)")
+        sceneView.pointOfView = node
+
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {

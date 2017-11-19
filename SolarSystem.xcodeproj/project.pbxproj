@@ -18,6 +18,7 @@
 		83D68AAF1FC1EEC500C5405C /* SCNNode+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D68AAC1FC1EEC500C5405C /* SCNNode+Extension.swift */; };
 		83D68AB01FC1EEC500C5405C /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D68AAD1FC1EEC500C5405C /* Extensions.swift */; };
 		83D68AB21FC1EEDD00C5405C /* BaseNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D68AB11FC1EEDD00C5405C /* BaseNode.swift */; };
+		83D68AB61FC2132200C5405C /* SkyMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D68AB51FC2132100C5405C /* SkyMapViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 		83D68AAC1FC1EEC500C5405C /* SCNNode+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SCNNode+Extension.swift"; sourceTree = "<group>"; };
 		83D68AAD1FC1EEC500C5405C /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		83D68AB11FC1EEDD00C5405C /* BaseNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseNode.swift; sourceTree = "<group>"; };
+		83D68AB51FC2132100C5405C /* SkyMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkyMapViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +78,7 @@
 				2FFF1E911F19442E00768AB9 /* LaunchScreen.storyboard */,
 				834C95121FC1EA70005E15E6 /* SceneKitDemo.swift */,
 				2FFF1E8A1F19442E00768AB9 /* ViewController.swift */,
+				83D68AB51FC2132100C5405C /* SkyMapViewController.swift */,
 				83D68AA81FC1EE7000C5405C /* ViewController+Gestures.swift */,
 			);
 			path = SolarSystem;
@@ -165,6 +168,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83D68AA71FC1EBCE00C5405C /* ViewController.swift in Sources */,
+				83D68AB61FC2132200C5405C /* SkyMapViewController.swift in Sources */,
 				83D68AAE1FC1EEC500C5405C /* ARGesture.swift in Sources */,
 				83D68AB01FC1EEC500C5405C /* Extensions.swift in Sources */,
 				83D68AA91FC1EE7000C5405C /* ViewController+Gestures.swift in Sources */,
