@@ -65,18 +65,18 @@
 		2FFF1E851F19442E00768AB9 /* SolarSystem */ = {
 			isa = PBXGroup;
 			children = (
-				834C95121FC1EA70005E15E6 /* SceneKitDemo.swift */,
-				834C95101FC1E92E005E15E6 /* BaseNode.swift */,
-				834C950E1FC1E912005E15E6 /* SCNNode+Extension.swift */,
-				834C950C1FC1E8E3005E15E6 /* ARGesture.swift */,
-				834C950A1FC13EB1005E15E6 /* GyroScene.scn */,
 				2FFF1E861F19442E00768AB9 /* AppDelegate.swift */,
+				834C950C1FC1E8E3005E15E6 /* ARGesture.swift */,
 				2FFF1E881F19442E00768AB9 /* art.scnassets */,
-				2FFF1E8A1F19442E00768AB9 /* ViewController.swift */,
-				2FC06F541F1C9DE30084DA7A /* Extensions.swift */,
 				2FFF1E8F1F19442E00768AB9 /* Assets.xcassets */,
-				2FFF1E911F19442E00768AB9 /* LaunchScreen.storyboard */,
+				834C95101FC1E92E005E15E6 /* BaseNode.swift */,
+				2FC06F541F1C9DE30084DA7A /* Extensions.swift */,
+				834C950A1FC13EB1005E15E6 /* GyroScene.scn */,
 				2FFF1E941F19442E00768AB9 /* Info.plist */,
+				2FFF1E911F19442E00768AB9 /* LaunchScreen.storyboard */,
+				834C95121FC1EA70005E15E6 /* SceneKitDemo.swift */,
+				834C950E1FC1E912005E15E6 /* SCNNode+Extension.swift */,
+				2FFF1E8A1F19442E00768AB9 /* ViewController.swift */,
 			);
 			path = SolarSystem;
 			sourceTree = "<group>";

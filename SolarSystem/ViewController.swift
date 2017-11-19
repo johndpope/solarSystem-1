@@ -79,11 +79,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sunNode.geometry?.firstMaterial?.fillMode = .lines
         //sunNode.addAnimation(spinAnimation(duration: 40), forKey: "spin")
         sunNode.position = SCNVector3Make(0, -0.2, -2)
-        
-        let light = SCNLight()
-        light.type = .directional
-        
         scene.rootNode.addChildNode(sunNode)
+        
+    
         
         for body in bodies {
             
@@ -95,7 +93,26 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             
             node.name = body.name!
             if (node.name == "earth"){
-                addViewCamera(node)
+            //    addViewCamera(node)
+                
+                
+                let camera = SCNCamera()                            // create a camera
+                let cameraRange = 120.0
+                camera.xFov = 800.0 / cameraRange
+                camera.yFov = 800.0 / cameraRange
+                camera.automaticallyAdjustsZRange = true
+                
+                let cameraNode = SCNNode()
+                cameraNode.name = "camra"
+                cameraNode.camera = camera
+
+                cameraNode.position = SCNVector3(x: -3.0, y: 3.0, z: 3.0)
+
+                let cameraConstraint = SCNLookAtConstraint(target: node)
+                cameraConstraint.isGimbalLockEnabled = true
+                cameraNode.constraints = [cameraConstraint]
+                scene.rootNode.addChildNode(cameraNode)
+        
             }
             node.geometry = sphere
             node.rotation = SCNVector4(2,4,0,CGFloat.pi / 4)
@@ -137,9 +154,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             scene.rootNode.addChildNode(node)
         }
         
-        self.sceneView.debugOptions = [ARSCNDebugOptions.showWorldOrigin, ARSCNDebugOptions.showFeaturePoints]
-
-        self.sceneView.debugOptions = [.showConstraints, .showLightExtents, ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
+        self.sceneView.debugOptions = [.showCreases,.showSkeletons,.showWireframe,.showPhysicsFields,.showPhysicsShapes,.showConstraints, .showLightExtents, ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
         self.sceneView.showsStatistics = true
         
         sceneView.delegate = self
@@ -189,25 +204,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     func addViewCamera(_ parentNode:SCNNode) -> Void {
         
-        let orbitNode = SCNNode()                           // non-rendering node, holds the camera
-        orbitNode.name = "orbit"
-        
-        let camera = SCNCamera()                            // create a camera
-        let cameraRange = 120.0
-        camera.xFov = 800.0 / cameraRange
-        camera.yFov = 800.0 / cameraRange
-        camera.automaticallyAdjustsZRange = true
-        
-        let cameraNode = SCNNode()
-        cameraNode.name = "camra"
-        cameraNode.camera = camera
-        cameraNode.position = SCNVector3(x: 0, y: 0, z: Float(CGFloat(cameraRange)))
-        
-        let cameraConstraint = SCNLookAtConstraint(target: parentNode)
-        cameraConstraint.isGimbalLockEnabled = true
-        cameraNode.constraints = [cameraConstraint]
-        
-        parentNode.addChildNode(cameraNode)                  //            "orbit" << "camra"
+
+           //            "orbit" << "camra"
         //.addChildNode(orbitNode)                  // "total" << "orbit"
     }
     
