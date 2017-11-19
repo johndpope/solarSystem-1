@@ -42,16 +42,17 @@ struct Ring {
 
 class ViewController: UIViewController, ARSCNViewDelegate {
 
-    @IBOutlet var sceneView: ARSCNView!
+    var sceneView = ARSCNView(frame:.zero)
     var scene: SCNScene!
     let moMan = CMMotionManager()
     var sunNode = SCNNode()
     var cube:SCNNode?
+    var currentGesture: ARGesture?
     
     var bodies = [
         Body(name: "mercury", mass: 0.055, period: 0.24, rotationPeriod: 58.65, distance: 1.0, diameter: 0.382, moons: [], ring: nil),
         Body(name: "venus", mass: 0.815, period: 0.62, rotationPeriod: 243, distance: 1.2, diameter: 0.949, moons: [], ring: nil),
-        Body(name: "earth", mass: 1.0, period: 1, rotationPeriod: 1, distance: 1.4, diameter: 1, moons: [
+        Body(name: "earth", mass: 1.0, period: 1, rotationPeriod: 1, distance: 1.4, diameter: 10, moons: [
             Moon(name: "moon", image: "art.scnassets/moonTexture.jpg", period: 0.5, size: 0.0025, distance: 0.03)
             ], ring: nil),
         Body(name: "mars", mass: 0.107, period: 1.88, rotationPeriod: 1.03, distance: 2.0, diameter: 0.532, moons: [], ring: nil),
@@ -64,6 +65,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.view.addSubview(sceneView)
+        sceneView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
+        sceneView.frame = self.view.bounds
         
         scene = SCNScene()
         
@@ -83,11 +88,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         for body in bodies {
             
             let sphere = SCNSphere(radius: 0.005 * body.diameter)
-            sphere.firstMaterial?.diffuse.contents = UIImage(named:"art.scnassets/\(body.name!)Texture.jpg")
+            //sphere.firstMaterial?.diffuse.contents = UIImage(named:"art.scnassets/\(body.name!)Texture.jpg")
+            sphere.firstMaterial?.fillMode = .lines
         
             let node = SCNNode()
             
             node.name = body.name!
+            if (node.name == "earth"){
+                addViewCamera(node)
+            }
             node.geometry = sphere
             node.rotation = SCNVector4(2,4,0,CGFloat.pi / 4)
             
@@ -129,6 +138,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         }
         
         self.sceneView.debugOptions = [ARSCNDebugOptions.showWorldOrigin, ARSCNDebugOptions.showFeaturePoints]
+
+        self.sceneView.debugOptions = [.showConstraints, .showLightExtents, ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
         self.sceneView.showsStatistics = true
         
         sceneView.delegate = self
@@ -142,7 +153,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // Create a session configuration
         let configuration = ARWorldTrackingConfiguration()
-        
+        configuration.planeDetection = .horizontal
         // Run the view's session
         sceneView.session.run(configuration)
         
@@ -176,6 +187,30 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         return spin
     }
     
+    func addViewCamera(_ parentNode:SCNNode) -> Void {
+        
+        let orbitNode = SCNNode()                           // non-rendering node, holds the camera
+        orbitNode.name = "orbit"
+        
+        let camera = SCNCamera()                            // create a camera
+        let cameraRange = 120.0
+        camera.xFov = 800.0 / cameraRange
+        camera.yFov = 800.0 / cameraRange
+        camera.automaticallyAdjustsZRange = true
+        
+        let cameraNode = SCNNode()
+        cameraNode.name = "camra"
+        cameraNode.camera = camera
+        cameraNode.position = SCNVector3(x: 0, y: 0, z: Float(CGFloat(cameraRange)))
+        
+        let cameraConstraint = SCNLookAtConstraint(target: parentNode)
+        cameraConstraint.isGimbalLockEnabled = true
+        cameraNode.constraints = [cameraConstraint]
+        
+        parentNode.addChildNode(cameraNode)                  //            "orbit" << "camra"
+        //.addChildNode(orbitNode)                  // "total" << "orbit"
+    }
+    
 
     
     // MARK: - ARSCNViewDelegate
@@ -207,5 +242,31 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func sessionInterruptionEnded(_ session: ARSession) {
         // Reset tracking and/or remove existing anchors if consistent tracking is required
         
+    }
+}
+
+extension ViewController {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        currentGesture = currentGesture?.updateGestureFromTouches(touches, .touchEnded)
+        guard let touchLocation = touches.first?.location(in: sceneView) else { return }
+        let results = sceneView.hitTest(touchLocation, options: [.boundingBoxOnly: true])
+        guard let result = results.first else { return }
+        currentGesture = ARGesture.startGestureFromTouches(touches, sceneView, result.node)
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesMoved(touches, with: event)
+        currentGesture = currentGesture?.updateGestureFromTouches(touches, .touchMoved)
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        currentGesture = currentGesture?.updateGestureFromTouches(touches, .touchEnded)
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        currentGesture = currentGesture?.updateGestureFromTouches(touches, .touchCancelled)
     }
 }
