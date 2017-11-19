@@ -8,7 +8,56 @@
 
 import UIKit
 import SceneKit
+import ARKit
 
+
+
+extension ARSCNView {
+    
+    func setup() {
+        antialiasingMode = .multisampling4X
+        automaticallyUpdatesLighting = true
+        
+        preferredFramesPerSecond = 60
+        contentScaleFactor = 1.3
+        
+        if let camera = pointOfView?.camera {
+            camera.wantsHDR = true
+            camera.wantsExposureAdaptation = true
+            camera.exposureOffset = -1
+            camera.minimumExposure = -1
+            camera.maximumExposure = 3
+        }
+    }
+}
+
+
+struct Body {
+    var name: String!
+    var mass: Double!
+    var period: Double!
+    var rotationPeriod: Double!
+    var distance: CGFloat!
+    var diameter: CGFloat!
+    var moons: [Moon]!
+    var ring: Ring?
+    //    var angle: Do
+}
+
+struct Moon {
+    var name: String!
+    var image: String!
+    var period: Double!
+    var size: CGFloat!
+    var distance: CGFloat!
+}
+
+struct Ring {
+    var inner: CGFloat!
+    var outer: CGFloat!
+    var height: CGFloat!
+    var image: String!
+}
 
 public extension SCNAction {
     
