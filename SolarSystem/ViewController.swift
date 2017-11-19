@@ -46,8 +46,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var scene: SCNScene!
     let moMan = CMMotionManager()
     var sunNode = SCNNode()
-    var cube:SCNNode?
+    var earth:SCNNode?
+
     var currentGesture: ARGesture?
+    let camera = SCNCamera()
+    let cameraNode = SCNNode()
     
     var bodies = [
         Body(name: "mercury", mass: 0.055, period: 0.24, rotationPeriod: 58.65, distance: 1.0, diameter: 0.382, moons: [], ring: nil),
@@ -73,8 +76,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         scene = SCNScene()
         
         let sunSphere = SCNSphere(radius: 0.3)
-       // sunSphere.firstMaterial?.diffuse.contents = UIImage(named:"art.scnassets/sunTexture.jpg")
-        
+
         sunNode.geometry = sunSphere
         sunNode.geometry?.firstMaterial?.fillMode = .lines
         //sunNode.addAnimation(spinAnimation(duration: 40), forKey: "spin")
@@ -93,22 +95,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             
             node.name = body.name!
             if (node.name == "earth"){
-            //    addViewCamera(node)
+                earth = node
                 
-                
-                let camera = SCNCamera()                            // create a camera
                 let cameraRange = 120.0
                 camera.xFov = 800.0 / cameraRange
                 camera.yFov = 800.0 / cameraRange
                 camera.automaticallyAdjustsZRange = true
                 
-                let cameraNode = SCNNode()
+                
                 cameraNode.name = "camra"
                 cameraNode.camera = camera
-
                 cameraNode.position = SCNVector3(x: -3.0, y: 3.0, z: 3.0)
-
-                let cameraConstraint = SCNLookAtConstraint(target: node)
+                let cameraConstraint = SCNLookAtConstraint(target: earth)
                 cameraConstraint.isGimbalLockEnabled = true
                 cameraNode.constraints = [cameraConstraint]
                 scene.rootNode.addChildNode(cameraNode)
@@ -171,10 +169,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         configuration.planeDetection = .horizontal
         // Run the view's session
         sceneView.session.run(configuration)
-        
-//        let frameScene = SCNScene(named: "GyroScene.scn")
-//        cube = frameScene?.rootNode.childNode(withName: "cube",  recursively: true)
-//        scene.rootNode.addChildNode(cube!)
+    
         moMan.startDeviceMotionUpdates(using: .xArbitraryCorrectedZVertical, to: OperationQueue.main) { [weak self] (motion, error) in
             if let q = motion?.attitude.quaternion {
                 self?.sunNode.orientation = SCNQuaternion(q.x, q.y, q.z, -q.w)
@@ -202,26 +197,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         return spin
     }
     
-    func addViewCamera(_ parentNode:SCNNode) -> Void {
-        
-
-           //            "orbit" << "camra"
-        //.addChildNode(orbitNode)                  // "total" << "orbit"
+    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+        lockCameraOnNode(node: earth!)
     }
-    
 
-    
-    // MARK: - ARSCNViewDelegate
-
-/*
-    // Override to create and configure nodes for anchors added to the view's session.
-    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        let node = SCNNode()
-     
-        return node
+    func lockCameraOnNode(node: SCNNode){
+        let nodePosition = node.presentation.position
+        cameraNode.position = SCNVector3(x: nodePosition.x, y: nodePosition.y+5, z: nodePosition.z+8)
     }
-*/
-    
     
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
         print(node)
@@ -243,28 +226,3 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
 }
 
-extension ViewController {
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        currentGesture = currentGesture?.updateGestureFromTouches(touches, .touchEnded)
-        guard let touchLocation = touches.first?.location(in: sceneView) else { return }
-        let results = sceneView.hitTest(touchLocation, options: [.boundingBoxOnly: true])
-        guard let result = results.first else { return }
-        currentGesture = ARGesture.startGestureFromTouches(touches, sceneView, result.node)
-    }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesMoved(touches, with: event)
-        currentGesture = currentGesture?.updateGestureFromTouches(touches, .touchMoved)
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-        currentGesture = currentGesture?.updateGestureFromTouches(touches, .touchEnded)
-    }
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesCancelled(touches, with: event)
-        currentGesture = currentGesture?.updateGestureFromTouches(touches, .touchCancelled)
-    }
-}
