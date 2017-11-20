@@ -33,7 +33,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var bodies = [
         Body(name: "mercury", mass: 0.055, period: 0.24, rotationPeriod: 58.65, distance: 1.0, diameter: 0.382, moons: [], ring: nil),
         Body(name: "venus", mass: 0.815, period: 0.62, rotationPeriod: 243, distance: 1.2, diameter: 0.949, moons: [], ring: nil),
-        Body(name: "earth", mass: 1.0, period: 1, rotationPeriod: 1, distance: 1.4, diameter: 30, moons: [
+        Body(name: "earth", mass: 1.0, period: 1, rotationPeriod: 1, distance: 1.4, diameter: 1, moons: [
             Moon(name: "moon", image: "art.scnassets/moonTexture.jpg", period: 0.5, size: 0.0025, distance: 0.03)
             ], ring: nil),
         Body(name: "mars", mass: 0.107, period: 1.88, rotationPeriod: 1.03, distance: 2.0, diameter: 0.532, moons: [], ring: nil),
@@ -93,16 +93,16 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         //   |_   cameraOrientation
         //     |_   cameraNode
         //create a main camera
-        cameraNode.position = SCNVector3Make(0, 0, 0.1)
+        cameraNode.position = SCNVector3Make(0, 0, 0.01)
         //create a node to manipulate the camera orientation
  
-        cameraHandle.position = SCNVector3Make(0, 0, -2)
+        cameraHandle.position = SCNVector3Make(0, 0, -0.01)
         let cameraOrientation = SCNNode()
         scene.rootNode.addChildNode(cameraHandle)
         cameraHandle.addChildNode(cameraOrientation)
         cameraOrientation.addChildNode(cameraNode)
         cameraNode.camera = SCNCamera()
-        cameraNode.camera?.zFar = 800
+//        cameraNode.camera?.zFar = 800
         cameraNode.camera?.fieldOfView = 55
          cameraHandleTransforms = cameraNode.transform
         // add an ambient light
@@ -185,10 +185,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
            //  sphere.segmentCount = 30
             sphere.firstMaterial?.diffuse.contents = UIImage(named:"art.scnassets/\(body.name!)Texture.jpg")
             
-            sphere.firstMaterial?.fillMode = .lines
+           // sphere.firstMaterial?.fillMode = .lines
         
             let node = SCNNode()
-            node.opacity = 0.6
+            //node.opacity = 0.6
             node.geometry?.firstMaterial?.transparencyMode = .rgbZero
             node.geometry?.firstMaterial?.transparency = 1.0
             node.name = body.name!
