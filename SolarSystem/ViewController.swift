@@ -135,7 +135,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let originalSpotTransform = spotLightNode.transform
         //floor
         // potential horizon
-        if false{
+        if true{
             let floor = SCNFloor()
             floor.reflectionFalloffEnd = 0
             floor.reflectivity = 0
@@ -168,7 +168,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.setup()
         sceneView.allowsCameraControl = true
        
-//        createEnvironment()
+        createEnvironment()
         
         let sunSphere = SCNSphere(radius: 0.1)
         sunNode.geometry = sunSphere
@@ -241,18 +241,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 //scene.rootNode.addChildNode(node) // nest inside seasonal title
                 earth = node
             
-                seasonalTilt.addChildNode(node)
-                
-                // tilt it on it's axis (23.5 degrees), varied by the actual day of the year
-                // (note that children nodes are correctly tilted with the parents coordinate space)
-                let calendar = Calendar(identifier: .gregorian)
-                let dayOfYear = Double( calendar.ordinality(of: .day, in: .year, for: Date())! )
-                let daysSinceWinterSolstice = remainder(dayOfYear + 10.0, kDaysInAYear)
-                let daysSinceWinterSolsticeInRadians = daysSinceWinterSolstice * 2.0 * Double.pi / kDaysInAYear
-                let tiltXRadians = -cos( daysSinceWinterSolsticeInRadians) * kTiltOfEarthsAxisInRadians
-                //
-                seasonalTilt.eulerAngles = SCNVector3(x: Float(tiltXRadians), y: 0.0, z: 0)
-                scene.rootNode.addChildNode(seasonalTilt)
+//                seasonalTilt.addChildNode()
+//
+//                // tilt it on it's axis (23.5 degrees), varied by the actual day of the year
+//                // (note that children nodes are correctly tilted with the parents coordinate space)
+//                let calendar = Calendar(identifier: .gregorian)
+//                let dayOfYear = Double( calendar.ordinality(of: .day, in: .year, for: Date())! )
+//                let daysSinceWinterSolstice = remainder(dayOfYear + 10.0, kDaysInAYear)
+//                let daysSinceWinterSolsticeInRadians = daysSinceWinterSolstice * 2.0 * Double.pi / kDaysInAYear
+//                let tiltXRadians = -cos( daysSinceWinterSolsticeInRadians) * kTiltOfEarthsAxisInRadians
+//                //
+//                seasonalTilt.eulerAngles = SCNVector3(x: Float(tiltXRadians), y: 0.0, z: 0)
+                scene.rootNode.addChildNode(node)
 
              
             }else{
@@ -310,17 +310,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-        lockCameraOnNode(node: seasonalTilt)
+        changePointOfViewTo(node: earth!)
         //earth?.look(at: sceneView.pointOfView!, offset: nil)
     }
 
-    func lockCameraOnNode(node: SCNNode){
+    func changePointOfViewTo(node: SCNNode){
         let nodePosition = node.presentation.position
         let nodeRotation = node.presentation.rotation
         
-        print("current POV:",sceneView.pointOfView?.position)
+      //  print("current POV:",sceneView.pointOfView?.position)
         
-        print("x:\(nodePosition.x) y:\(nodePosition.y) z:\(nodePosition.z)")
+       //s print("x:\(nodePosition.x) y:\(nodePosition.y) z:\(nodePosition.z)")
         let newNodePosition =  SCNVector3(x: nodePosition.x, y: nodePosition.y, z: nodePosition.z )
         // how to zoom back to include picture of earth????
         sceneView.pointOfView?.position = newNodePosition
