@@ -170,7 +170,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
        
         createEnvironment()
         
-        let sunSphere = SCNSphere(radius: 0.3)
+        let sunSphere = SCNSphere(radius: 0.1)
         sunNode.geometry = sunSphere
         sunSphere.firstMaterial?.diffuse.contents = UIImage(named:"art.scnassets/sunTexture.jpg")
         sunNode.addAnimation(spinAnimation(duration: 40), forKey: "spin")
@@ -319,20 +319,16 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
 
     func lockCameraOnNode(node: SCNNode){
-        var nodePosition = node.presentation.position
+        let nodePosition = node.presentation.position
         let nodeRotation = node.presentation.rotation
         
         print("current POV:",sceneView.pointOfView?.position)
         
         print("x:\(nodePosition.x) y:\(nodePosition.y) z:\(nodePosition.z)")
-        //nodePosition =  SCNVector3(x: nodePosition.x, y: nodePosition.y, z: nodePosition.z - 2)
-        
-//        if let cc = camCoords.getCameraCoordinates(sceneView: sceneView){
-      //      node.position = SCNVector3(cc.x, cc.y, cc.z)
-//        }
+      //  let newNodePosition =  SCNVector3(x: nodePosition.x, y: nodePosition.y, z: nodePosition.z - 10)
         
         sceneView.pointOfView?.position = nodePosition
-       // sceneView.pointOfView?.rotation = nodeRotation
+        sceneView.pointOfView?.rotation = nodeRotation
 
 
     }
