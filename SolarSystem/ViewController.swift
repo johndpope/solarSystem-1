@@ -20,6 +20,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var camera = SCNCamera()
     var heading:Float  = 0.0
 
+    //camera manipulation
+    var cameraHandleTransforms:SCNMatrix4?
+    var initialOffset:CGPoint = CGPoint(x:0, y:0)
+    var lastOffset:CGPoint?
+    var lastSpinOffset:CGPoint?
+    
     var currentGesture: ARGesture?
     let cameraNode = SCNNode()
     
@@ -36,6 +42,122 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         Body(name: "neptune", mass: 17, period: 164.8, rotationPeriod: 0.72, distance: 3.6, diameter: 3.883, moons: [], ring: nil)
     ]
     
+/*
+    func privateTiltCamera(withOffset offset: CGPoint) -> Bool {
+        var offset = offset
+        offset.x += initialOffset.x
+        offset.y += initialOffset.y
+        var tr: CGPoint
+        tr.x = offset.x - lastOffset!.x
+        tr.y = offset.y - lastOffset!.y
+        lastOffset = offset
+        offset.x *= 0.1
+        offset.y *= 0.1
+        var rx: Float = offset.y
+        //offset.y > 0 ? log(1 + offset.y * offset.y) : -log(1 + offset.y * offset.y);
+        var ry: Float = offset.x
+        //offset.x > 0 ? log(1 + offset.x * offset.x) : -log(1 + offset.x * offset.x);
+        ry *= 0.05
+        rx *= 0.05
+        rx = -rx
+        //on iOS, invert rotation on the X axis
+        if rx > 0.5 {
+            rx = 0.5
+            initialOffset.y -= tr.y
+            lastOffset.y -= tr.y
+        }
+        if rx < -M_PI_2 {
+            rx = -M_PI_2
+            initialOffset.y -= tr.y
+            lastOffset.y -= tr.y
+        }
+        if ry > MAX_RY {
+            ry = MAX_RY
+            initialOffset.x -= tr.x
+            lastOffset.x -= tr.x
+        }
+        if ry < -MAX_RY {
+            ry = -MAX_RY
+            initialOffset.x -= tr.x
+            lastOffset.x -= tr.x
+        }
+        ry = -ry
+        cameraHandle.eulerAngles = SCNVector3Make(rx, ry, 0)
+        return true
+    }
+*/
+    
+    func createEnvironment() {
+        // |_   cameraHandle
+        //   |_   cameraOrientation
+        //     |_   cameraNode
+        //create a main camera
+        cameraNode.position = SCNVector3Make(0, 0, 120)
+        //create a node to manipulate the camera orientation
+        let cameraHandle = SCNNode()
+        cameraHandle.position = SCNVector3Make(0, 60, 0)
+        let cameraOrientation = SCNNode()
+        scene.rootNode.addChildNode(cameraHandle)
+        cameraHandle.addChildNode(cameraOrientation)
+        cameraOrientation.addChildNode(cameraNode)
+        cameraNode.camera = SCNCamera()
+        cameraNode.camera?.zFar = 800
+        cameraNode.camera?.yFov = 55
+         cameraHandleTransforms = cameraNode.transform
+        // add an ambient light
+        let ambientLightNode = SCNNode()
+        ambientLightNode.light = SCNLight()
+        ambientLightNode.light?.type = .ambient
+        ambientLightNode.light?.color = SKColor(white: 0.3, alpha: 1.0)
+        scene.rootNode.addChildNode(ambientLightNode)
+        //add a key light to the scene
+        let spotLightParentNode = SCNNode()
+        spotLightParentNode.position = SCNVector3Make(0, 90, 20)
+        let spotLightNode = SCNNode()
+        spotLightNode.rotation = SCNVector4Make(1, 0, 0, Float(-Double.pi / 4))
+        spotLightNode.light = SCNLight()
+        spotLightNode.light?.type = .spot
+        spotLightNode.light?.color = SKColor(white: 1.0, alpha: 1.0)
+        spotLightNode.light?.castsShadow = true
+        spotLightNode.light?.shadowColor = SKColor(white: 0.0, alpha: 0.5)
+        spotLightNode.light?.zNear = 30
+        spotLightNode.light?.zFar = 800
+        spotLightNode.light?.shadowRadius = 1.0
+        spotLightNode.light?.spotInnerAngle = 15
+        spotLightNode.light?.spotOuterAngle = 70
+        cameraNode.addChildNode(spotLightParentNode)
+        spotLightParentNode.addChildNode(spotLightNode)
+        
+        // make the camera the point of view
+        sceneView.pointOfView?.addChildNode(cameraNode)
+        
+        //save spotlight transform
+        let originalSpotTransform = spotLightNode.transform
+        //floor
+        // potential horizon
+        if false{
+            let floor = SCNFloor()
+            floor.reflectionFalloffEnd = 0
+            floor.reflectivity = 0
+            let floorNode = SCNNode()
+            floorNode.geometry = floor
+            //floorNode.geometry.firstMaterial?.diffuse.contents = "wood.png"
+            floorNode.geometry?.firstMaterial?.locksAmbientWithDiffuse = true
+            floorNode.geometry?.firstMaterial?.diffuse.wrapS = .repeat
+            floorNode.geometry?.firstMaterial?.diffuse.wrapT = .repeat
+            floorNode.geometry?.firstMaterial?.diffuse.mipFilter = .nearest
+            floorNode.geometry?.firstMaterial?.isDoubleSided = false
+            floorNode.physicsBody = SCNPhysicsBody.static()
+            floorNode.physicsBody?.restitution = 1.0
+            scene.rootNode.addChildNode(floorNode)
+        }
+       
+        
+       
+      
+        
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,7 +166,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
         sceneView.frame = self.view.bounds
         sceneView.setup()
-
+        sceneView.allowsCameraControl = true
+       
+        createEnvironment()
+        
         let sunSphere = SCNSphere(radius: 0.3)
         sunNode.geometry = sunSphere
         //sunNode.geometry?.firstMaterial?.fillMode = .lines
@@ -128,8 +253,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 //
                 seasonalTilt.eulerAngles = SCNVector3(x: Float(tiltXRadians), y: 0.0, z: 0)
                 scene.rootNode.addChildNode(seasonalTilt)
+                //constrainCameraToPlanetNode(earth!)
+                let constraint = SCNLookAtConstraint(target: earth!)
+                constraint.isGimbalLockEnabled = true
+               cameraNode.constraints = [ constraint ]
                 
-                //
              
             }else{
                 scene.rootNode.addChildNode(node)
