@@ -106,8 +106,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // TODO clarify if it's more accurate to attach cameraHandle to scene or point of view.
         //scene.rootNode.addChildNode(cameraHandle)
-        print("👀 - attaching cameraHandle to sceneView.pointOfView ")
-        sceneView.pointOfView?.addChildNode(cameraHandle)
+//        print("👀 - attaching cameraHandle to sceneView.pointOfView ")
+//        sceneView.pointOfView?.addChildNode(cameraHandle)
+
 
 
         //  horizon
@@ -258,21 +259,25 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         
-
+        focusOnEarth()
     }
 
     func focusOnEarth(){
-        //if let cc = camCoords.getCameraCoordinates(sceneView: sceneView){
-        //   cameraHandle.position = SCNVector3(cc.x, cc.y, cc.z - 1)
-        //      /    //  sceneView.scene.rootNode.addChildNode(node)
-        //}
-        //
         
+        if (cameraNode != sceneView.pointOfView){
+            print("👀 - making cameraNode the sceneView.pointOfView ")
+            sceneView.pointOfView = cameraNode
+        }
+        
+        if let cc = camCoords.getCameraCoordinates(sceneView: sceneView){
+           cameraHandle.position = SCNVector3(cc.x, cc.y, cc.z - 1)
+        //  sceneView.scene.rootNode.addChildNode(node)
+        }
         
         //        print("earth position:",earth?.position)
-        var zoomedOutEarthCameraPosition = earth?.position
-        zoomedOutEarthCameraPosition?.z = -1
-        cameraHandle.position = zoomedOutEarthCameraPosition!
+        var pos = earth?.position
+        pos?.z = -1
+        cameraHandle.position = pos!
         sceneView.pointOfView?.position = cameraHandle.position
         sceneView.pointOfView?.rotation = cameraHandle.rotation
         
