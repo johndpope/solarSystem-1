@@ -49,7 +49,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sunNode.geometry = sunSphere
         //sunNode.geometry?.firstMaterial?.fillMode = .lines
         sunNode.addAnimation(spinAnimation(duration: 40), forKey: "spin")
-        sunNode.position = SCNVector3Make(0, 0, 0)
+        sunNode.position = SCNVector3Make(0, 0, -2)
   
 
         scene.rootNode.addChildNode(sunNode)
@@ -58,7 +58,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         for body in bodies {
             
             let sphere = SCNSphere(radius: 0.005 * body.diameter)
-             sphere.segmentCount = 30
+           //  sphere.segmentCount = 30
             sphere.firstMaterial?.diffuse.contents = UIImage(named:"art.scnassets/\(body.name!)Texture.jpg")
             //sphere.firstMaterial?.fillMode = .lines
         
@@ -111,8 +111,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                     node.addChildNode(child)
                    
                 }
-                node.scale = SCNVector3(0.0001, 0.0001, 0.0001)
-               // node.scale = SCNVector3(0.01, 0.01, 0.01)
+                //node.scale = SCNVector3(0.0001, 0.0001, 0.0001)
+                node.scale = SCNVector3(0.01, 0.01, 0.01)
                 //scene.rootNode.addChildNode(node) // nest inside seasonal title
                 earth = node
             
