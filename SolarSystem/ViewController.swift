@@ -102,7 +102,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         cameraHandle.addChildNode(cameraOrientation)
         cameraOrientation.addChildNode(cameraNode)
         cameraNode.camera = SCNCamera()
-        cameraNode.camera?.zFar = 80
+        cameraNode.camera?.zFar = 800
         cameraNode.camera?.fieldOfView = 55
          cameraHandleTransforms = cameraNode.transform
         // add an ambient light
@@ -184,9 +184,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             let sphere = SCNSphere(radius: 0.005 * body.diameter)
            //  sphere.segmentCount = 30
             sphere.firstMaterial?.diffuse.contents = UIImage(named:"art.scnassets/\(body.name!)Texture.jpg")
-            //sphere.firstMaterial?.fillMode = .lines
+            
+            sphere.firstMaterial?.fillMode = .lines
         
             let node = SCNNode()
+            node.opacity = 0.6
+            node.geometry?.firstMaterial?.transparencyMode = .rgbZero
+            node.geometry?.firstMaterial?.transparency = 1.0
             node.name = body.name!
             node.geometry = sphere
             node.rotation = SCNVector4(2,4,0,CGFloat.pi / 4)
