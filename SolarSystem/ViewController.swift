@@ -36,6 +36,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var lastSpinOffset:CGPoint?
     
     var currentGesture: ARGesture? // not used
+    
+    var myLocationNode:GlobeGlowPoint?
   
     
     var bodies = [
@@ -106,8 +108,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // TODO clarify if it's more accurate to attach cameraHandle to scene or point of view.
         //scene.rootNode.addChildNode(cameraHandle)
-//        print("👀 - attaching cameraHandle to sceneView.pointOfView ")
-//        sceneView.pointOfView?.addChildNode(cameraHandle)
+        print("👀 - attaching cameraHandle to sceneView.pointOfView ")
+        sceneView.pointOfView?.addChildNode(cameraHandle)
 
 
 
@@ -204,6 +206,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 //                seasonalTilt.eulerAngles = SCNVector3(x: Float(tiltXRadians), y: 0.0, z: 0)
                 scene.rootNode.addChildNode(node)
                 constrainCameraToPlanetNode(node)
+                addEarthPoles()
 
             }else{
                 scene.rootNode.addChildNode(node)
@@ -259,32 +262,35 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         
-        focusOnEarth()
+        if let position = myLocationNode?.node?.position{
+            /*    sceneView.pointOfView?.position = position
+             if let earthRotaiton = earth?.rotation{
+             sceneView.pointOfView?.rotation = earthRotaiton
+             }*/
+            
+        }else{
+            focusOnEarth()
+        }
     }
 
     func focusOnEarth(){
         
-        if (cameraNode != sceneView.pointOfView){
+       /* if (cameraNode != sceneView.pointOfView){
             print("👀 - making cameraNode the sceneView.pointOfView ")
             sceneView.pointOfView = cameraNode
-        }
+        }*/
         
-        if let cc = camCoords.getCameraCoordinates(sceneView: sceneView){
-           cameraHandle.position = SCNVector3(cc.x, cc.y, cc.z - 1)
-        //  sceneView.scene.rootNode.addChildNode(node)
-        }
+        // zoom to user's location
+       
+            sceneView.pointOfView?.position = cameraHandle.position
+//            sceneView.pointOfView?.rotation = cameraHandle.rotation
         
-        //        print("earth position:",earth?.position)
-        var pos = earth?.position
-        pos?.z = -1
-        cameraHandle.position = pos!
-        sceneView.pointOfView?.position = cameraHandle.position
-        sceneView.pointOfView?.rotation = cameraHandle.rotation
+            //        sceneView.pointOfView?.position = zoomedOutEarthCameraPosition!
+            /*sceneView.pointOfView?.position = cameraHandle.presentation.position
+             sceneView.pointOfView?.rotation = cameraHandle.presentation.rotation
+             sceneView.pointOfView?.orientation = cameraHandle.presentation.orientation*/
+//        }
         
-        //        sceneView.pointOfView?.position = zoomedOutEarthCameraPosition!
-        /*sceneView.pointOfView?.position = cameraHandle.presentation.position
-         sceneView.pointOfView?.rotation = cameraHandle.presentation.rotation
-         sceneView.pointOfView?.orientation = cameraHandle.presentation.orientation*/
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {

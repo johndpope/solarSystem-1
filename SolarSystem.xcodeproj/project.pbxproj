@@ -27,6 +27,8 @@
 		83D68AC81FC238EE00C5405C /* SwiftGlobe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D68AC71FC238ED00C5405C /* SwiftGlobe.swift */; };
 		83D68ACA1FC23BEC00C5405C /* ViewController+CoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D68AC91FC23BEC00C5405C /* ViewController+CoreLocation.swift */; };
 		83F1776B1FC3243E000A12A1 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F1776A1FC3243E000A12A1 /* Camera.swift */; };
+		83F1776D1FC33DCE000A12A1 /* ViewController+Drawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F1776C1FC33DCD000A12A1 /* ViewController+Drawing.swift */; };
+		83F1776F1FC34062000A12A1 /* CylinderLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F1776E1FC34061000A12A1 /* CylinderLine.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +55,8 @@
 		83D68AC71FC238ED00C5405C /* SwiftGlobe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftGlobe.swift; sourceTree = "<group>"; };
 		83D68AC91FC23BEC00C5405C /* ViewController+CoreLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+CoreLocation.swift"; sourceTree = "<group>"; };
 		83F1776A1FC3243E000A12A1 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
+		83F1776C1FC33DCD000A12A1 /* ViewController+Drawing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+Drawing.swift"; sourceTree = "<group>"; };
+		83F1776E1FC34061000A12A1 /* CylinderLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CylinderLine.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,7 +89,10 @@
 		2FFF1E851F19442E00768AB9 /* SolarSystem */ = {
 			isa = PBXGroup;
 			children = (
+				83F1776E1FC34061000A12A1 /* CylinderLine.swift */,
 				83D68AB51FC2132100C5405C /* SkyMapViewController.swift */,
+				834C95121FC1EA70005E15E6 /* SceneKitDemo.swift */,
+				83F1776A1FC3243E000A12A1 /* Camera.swift */,
 				83D68AC71FC238ED00C5405C /* SwiftGlobe.swift */,
 				83D68AC21FC238A000C5405C /* Resources */,
 				83D68ABE1FC228A700C5405C /* art.scnassets */,
@@ -95,10 +102,9 @@
 				834C950A1FC13EB1005E15E6 /* GyroScene.scn */,
 				2FFF1E941F19442E00768AB9 /* Info.plist */,
 				2FFF1E911F19442E00768AB9 /* LaunchScreen.storyboard */,
-				834C95121FC1EA70005E15E6 /* SceneKitDemo.swift */,
 				2FFF1E8A1F19442E00768AB9 /* ViewController.swift */,
-				83F1776A1FC3243E000A12A1 /* Camera.swift */,
 				83D68AC91FC23BEC00C5405C /* ViewController+CoreLocation.swift */,
+				83F1776C1FC33DCD000A12A1 /* ViewController+Drawing.swift */,
 				836E923A1FC248EC00D0B1FF /* ViewController+CoreMotion.swift */,
 				83D68AA81FC1EE7000C5405C /* ViewController+Gestures.swift */,
 				836E92381FC2467000D0B1FF /* VirtualObjectARView.swift */,
@@ -206,6 +212,7 @@
 				83D68AC81FC238EE00C5405C /* SwiftGlobe.swift in Sources */,
 				83D68AB61FC2132200C5405C /* SkyMapViewController.swift in Sources */,
 				83D68AB81FC2270B00C5405C /* MyCameraCoordinates.swift in Sources */,
+				83F1776D1FC33DCE000A12A1 /* ViewController+Drawing.swift in Sources */,
 				83D68AAE1FC1EEC500C5405C /* ARGesture.swift in Sources */,
 				83D68ACA1FC23BEC00C5405C /* ViewController+CoreLocation.swift in Sources */,
 				83D68AB01FC1EEC500C5405C /* Extensions.swift in Sources */,
@@ -215,6 +222,7 @@
 				2FFF1E871F19442E00768AB9 /* AppDelegate.swift in Sources */,
 				83F1776B1FC3243E000A12A1 /* Camera.swift in Sources */,
 				83D68AB21FC1EEDD00C5405C /* BaseNode.swift in Sources */,
+				83F1776F1FC34062000A12A1 /* CylinderLine.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

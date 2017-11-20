@@ -21,6 +21,8 @@ let coordinateFormatter: NumberFormatter = {
 
 extension ViewController:CLLocationManagerDelegate{
     
+    
+    
     // MARK: Location manager
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         guard status != .authorizedWhenInUse || status != .authorizedAlways else {
@@ -43,7 +45,8 @@ extension ViewController:CLLocationManagerDelegate{
             // make this one white!
             zz.node.geometry!.firstMaterial!.diffuse.contents = "whiteGlow-32x32.png"
             earth?.addChildNode(zz.node)
-            
+            constrainCameraToPlanetNode(zz.node)
+            myLocationNode = zz
         }
         
     }
