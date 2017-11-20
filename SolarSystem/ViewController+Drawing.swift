@@ -15,17 +15,12 @@ import CoreLocation
 
 extension ViewController{
     
-    func addEarthPoles(){
+    func addNorthSouthPoles(node:SCNNode){
         let northPole = GlobeGlowPoint(lat: 90,lon: 0)
         let southPole = GlobeGlowPoint(lat: -90,lon: 0)
-        let line = lineBetweenNodeA(nodeA:northPole.node,nodeB:southPole.node)
+        let line = cylinderLineBetweenNodeA(nodeA:northPole.node,nodeB:southPole.node)
         
-        let colorMaterial = SCNMaterial()
-        colorMaterial.diffuse.contents = UIColor.red
-        line.geometry!.firstMaterial = colorMaterial
-        
-        earth?.addChildNode(line)
-        
+        node.addChildNode(line)
     }
     
     func cylinderLineBetweenNodeA(nodeA: SCNNode, nodeB: SCNNode) -> SCNNode {

@@ -137,6 +137,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sunSphere.firstMaterial?.diffuse.contents = UIImage(named:"art.scnassets/sunTexture.jpg")
         sunNode.addAnimation(spinAnimation(duration: 40), forKey: "spin")
         sunNode.position = SCNVector3Make(0, 0, -2)
+        addNorthSouthPoles(node:sunNode)
         scene.rootNode.addChildNode(sunNode)
         
         
@@ -206,11 +207,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 //                seasonalTilt.eulerAngles = SCNVector3(x: Float(tiltXRadians), y: 0.0, z: 0)
                 scene.rootNode.addChildNode(node)
                 constrainCameraToPlanetNode(node)
-                addEarthPoles()
 
             }else{
                 scene.rootNode.addChildNode(node)
             }
+            
+            addNorthSouthPoles(node:node)
         }
         
     }

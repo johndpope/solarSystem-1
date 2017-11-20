@@ -16,7 +16,7 @@ extension ViewController{
     func listenForCoreMotionChanges(){
         moMan.startDeviceMotionUpdates(using: .xArbitraryCorrectedZVertical, to: OperationQueue.main) { [weak self] (motion, error) in
             if let q = motion?.attitude.quaternion {
-                self?.earth?.orientation = SCNQuaternion(q.x, q.y, q.z, -q.w)
+              //  self?.earth?.orientation = SCNQuaternion(q.x, q.y, q.z, -q.w)
 
             }
         }
