@@ -26,6 +26,7 @@
 		83D68AC61FC238A100C5405C /* whiteGlow-32x32.png in Resources */ = {isa = PBXBuildFile; fileRef = 83D68AC41FC238A000C5405C /* whiteGlow-32x32.png */; };
 		83D68AC81FC238EE00C5405C /* SwiftGlobe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D68AC71FC238ED00C5405C /* SwiftGlobe.swift */; };
 		83D68ACA1FC23BEC00C5405C /* ViewController+CoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D68AC91FC23BEC00C5405C /* ViewController+CoreLocation.swift */; };
+		83F1776B1FC3243E000A12A1 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F1776A1FC3243E000A12A1 /* Camera.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +52,7 @@
 		83D68AC41FC238A000C5405C /* whiteGlow-32x32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteGlow-32x32.png"; sourceTree = "<group>"; };
 		83D68AC71FC238ED00C5405C /* SwiftGlobe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftGlobe.swift; sourceTree = "<group>"; };
 		83D68AC91FC23BEC00C5405C /* ViewController+CoreLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+CoreLocation.swift"; sourceTree = "<group>"; };
+		83F1776A1FC3243E000A12A1 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,7 @@
 				2FFF1E911F19442E00768AB9 /* LaunchScreen.storyboard */,
 				834C95121FC1EA70005E15E6 /* SceneKitDemo.swift */,
 				2FFF1E8A1F19442E00768AB9 /* ViewController.swift */,
+				83F1776A1FC3243E000A12A1 /* Camera.swift */,
 				83D68AC91FC23BEC00C5405C /* ViewController+CoreLocation.swift */,
 				836E923A1FC248EC00D0B1FF /* ViewController+CoreMotion.swift */,
 				83D68AA81FC1EE7000C5405C /* ViewController+Gestures.swift */,
@@ -210,6 +213,7 @@
 				83D68AA91FC1EE7000C5405C /* ViewController+Gestures.swift in Sources */,
 				83D68AAF1FC1EEC500C5405C /* SCNNode+Extension.swift in Sources */,
 				2FFF1E871F19442E00768AB9 /* AppDelegate.swift in Sources */,
+				83F1776B1FC3243E000A12A1 /* Camera.swift in Sources */,
 				83D68AB21FC1EEDD00C5405C /* BaseNode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -339,7 +343,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = WMDZ2CQA8K;
+				DEVELOPMENT_TEAM = KL43C67G5Z;
 				INFOPLIST_FILE = SolarSystem/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Octopus.SolarSystem3;
@@ -353,7 +357,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = WMDZ2CQA8K;
+				DEVELOPMENT_TEAM = KL43C67G5Z;
 				INFOPLIST_FILE = SolarSystem/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Octopus.SolarSystem3;

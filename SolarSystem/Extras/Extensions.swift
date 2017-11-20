@@ -14,12 +14,28 @@ import ARKit
 
 extension ARSCNView {
     
+    func showDebug(){
+          debugOptions = [.showPhysicsShapes,.showWireframe,.showSkeletons, .showConstraints, .showLightExtents, ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
+    }
+    
     func setup() {
         antialiasingMode = .multisampling4X
         automaticallyUpdatesLighting = true
         
         preferredFramesPerSecond = 60
-        contentScaleFactor = 1.3
+        contentScaleFactor = 1
+        
+        allowsCameraControl = true
+       
+        showsStatistics = true
+
+        scene.lightingEnvironment.intensity = 1000
+        // Create a session configuration
+        let configuration = ARWorldTrackingConfiguration()
+        configuration.planeDetection = .horizontal
+        // Run the view's session
+        session.run(configuration)
+        
         
         if let camera = pointOfView?.camera {
             camera.wantsHDR = true

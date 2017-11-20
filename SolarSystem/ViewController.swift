@@ -7,8 +7,12 @@ import CoreLocation
 
 
 class ViewController: UIViewController, ARSCNViewDelegate {
+    
     lazy var locationManager = CLLocationManager()
     var currentLocation:CLLocation?
+    var heading:Float  = 0.0
+    
+    
     var camCoords = MyCameraCoordinates()
     var sceneView = VirtualObjectARView(frame:.zero)
     var seasonalTilt = SCNNode()
@@ -17,18 +21,22 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     let moMan = CMMotionManager()
     var sunNode = SCNNode()
     var earth:SCNNode?
+    
+
+    
+
+
+    // Camera manipulation
     var camera = SCNCamera()
     let cameraHandle = SCNNode()
-    var heading:Float  = 0.0
-
-    //camera manipulation
+    let cameraNode = SCNNode()
     var cameraHandleTransforms:SCNMatrix4?
     var initialOffset:CGPoint = CGPoint(x:0, y:0)
     var lastOffset:CGPoint?
     var lastSpinOffset:CGPoint?
     
-    var currentGesture: ARGesture?
-    let cameraNode = SCNNode()
+    var currentGesture: ARGesture? // not used
+  
     
     var bodies = [
         Body(name: "mercury", mass: 0.055, period: 0.24, rotationPeriod: 58.65, distance: 1.0, diameter: 0.382, moons: [], ring: nil),
@@ -38,73 +46,38 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             ], ring: nil),
         Body(name: "mars", mass: 0.107, period: 1.88, rotationPeriod: 1.03, distance: 2.0, diameter: 0.532, moons: [], ring: nil),
         Body(name: "jupiter", mass: 318, period: 11.86, rotationPeriod: 0.41, distance: 2.4, diameter: 11.209, moons: [], ring: nil),
-        Body(name: "saturn", mass: 95, period: 29.46, rotationPeriod: 0.44, distance: 2.8, diameter: 9.44, moons: [], ring: Ring(inner: 0.06, outer: 0.1, height: 0.0001, image: "art.scnassets/saturnRingsTexture.png")),
+        Body(name: "saturn", mass: 95, period: 29.46, rotationPeriod: 0.44, distance: 2.8, diameter: 9.44, moons: [
+           /*  Moon(name: "moon1", image: "art.scnassets/moonTexture.jpg", period: 0.45, size: 0.0025, distance: 2.811),
+              Moon(name: "moon2", image: "art.scnassets/moonTexture.jpg", period: 0.45, size: 0.0025, distance: 2.821),
+              Moon(name: "moon3", image: "art.scnassets/moonTexture.jpg", period: 0.85, size: 0.0025, distance: 2.84),
+              Moon(name: "moon4", image: "art.scnassets/moonTexture.jpg", period: 0.665, size: 0.0025, distance: 2.83),
+              Moon(name: "moon5", image: "art.scnassets/moonTexture.jpg", period: 0.85, size: 0.0025, distance: 2.82),
+              Moon(name: "moon6", image: "art.scnassets/moonTexture.jpg", period: 0.05, size: 0.0025, distance: 2.81)*/
+            ], ring: Ring(inner: 0.06, outer: 0.1, height: 0.0001, image: "art.scnassets/saturnRingsTexture.png")),
         Body(name: "uranus", mass: 15, period: 84.01, rotationPeriod: 0.72, distance: 3.2, diameter: 4.007, moons: [], ring: nil),
         Body(name: "neptune", mass: 17, period: 164.8, rotationPeriod: 0.72, distance: 3.6, diameter: 3.883, moons: [], ring: nil)
     ]
     
-/*
-    func privateTiltCamera(withOffset offset: CGPoint) -> Bool {
-        var offset = offset
-        offset.x += initialOffset.x
-        offset.y += initialOffset.y
-        var tr: CGPoint
-        tr.x = offset.x - lastOffset!.x
-        tr.y = offset.y - lastOffset!.y
-        lastOffset = offset
-        offset.x *= 0.1
-        offset.y *= 0.1
-        var rx: Float = offset.y
-        //offset.y > 0 ? log(1 + offset.y * offset.y) : -log(1 + offset.y * offset.y);
-        var ry: Float = offset.x
-        //offset.x > 0 ? log(1 + offset.x * offset.x) : -log(1 + offset.x * offset.x);
-        ry *= 0.05
-        rx *= 0.05
-        rx = -rx
-        //on iOS, invert rotation on the X axis
-        if rx > 0.5 {
-            rx = 0.5
-            initialOffset.y -= tr.y
-            lastOffset.y -= tr.y
-        }
-        if rx < -M_PI_2 {
-            rx = -M_PI_2
-            initialOffset.y -= tr.y
-            lastOffset.y -= tr.y
-        }
-        if ry > MAX_RY {
-            ry = MAX_RY
-            initialOffset.x -= tr.x
-            lastOffset.x -= tr.x
-        }
-        if ry < -MAX_RY {
-            ry = -MAX_RY
-            initialOffset.x -= tr.x
-            lastOffset.x -= tr.x
-        }
-        ry = -ry
-        cameraHandle.eulerAngles = SCNVector3Make(rx, ry, 0)
-        return true
-    }
-*/
-    
+
+    // Intention here I believe is to be able to provide more degrees of freedom with tilt for the camera within universe eg. to provide street level view
+    // reference code - https://github.com/op1000/EarthTravel/tree/master/EarthTravel/Classes
     func createEnvironment() {
         // |_   cameraHandle
         //   |_   cameraOrientation
         //     |_   cameraNode
+        
+        
         //create a main camera
         cameraNode.position = SCNVector3Make(0, 0, 0.01)
         //create a node to manipulate the camera orientation
- 
-        cameraHandle.position = SCNVector3Make(0, 0, -0.01)
+         cameraHandle.position = SCNVector3Make(0, 0, -0.01)
         let cameraOrientation = SCNNode()
-        scene.rootNode.addChildNode(cameraHandle)
         cameraHandle.addChildNode(cameraOrientation)
         cameraOrientation.addChildNode(cameraNode)
-        cameraNode.camera = SCNCamera()
-//        cameraNode.camera?.zFar = 800
-        cameraNode.camera?.fieldOfView = 55
-         cameraHandleTransforms = cameraNode.transform
+        cameraNode.camera = camera
+        cameraNode.camera?.zFar = 800 // ???
+        cameraNode.camera?.fieldOfView = 55 // ???
+        
         // add an ambient light
         let ambientLightNode = SCNNode()
         ambientLightNode.light = SCNLight()
@@ -115,7 +88,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let spotLightParentNode = SCNNode()
         spotLightParentNode.position = SCNVector3Make(0, 0, 0)
         let spotLightNode = SCNNode()
-        spotLightNode.rotation = SCNVector4Make(1, 0, 0, Float(-Double.pi / 4))
         spotLightNode.light = SCNLight()
         spotLightNode.light?.type = .spot
         spotLightNode.light?.color = SKColor(white: 1.0, alpha: 1.0)
@@ -128,13 +100,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         spotLightNode.light?.spotOuterAngle = 70
         cameraNode.addChildNode(spotLightParentNode)
         spotLightParentNode.addChildNode(spotLightNode)
-        scene.rootNode.addChildNode(cameraNode)
         
-        //save spotlight transform
-        //let originalSpotTransform = spotLightNode.transform
-        //floor
-        // potential horizon
-        if true{
+        
+         cameraHandleTransforms = cameraNode.transform  // ???
+        
+        // TODO clarify if it's more accurate to attach cameraHandle to scene or point of view.
+        //scene.rootNode.addChildNode(cameraHandle)
+        print("👀 - attaching cameraHandle to sceneView.pointOfView ")
+        sceneView.pointOfView?.addChildNode(cameraHandle)
+
+
+        //  horizon
+        if false{
             let floor = SCNFloor()
             floor.reflectionFalloffEnd = 0
             floor.reflectivity = 0
@@ -151,42 +128,23 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             scene.rootNode.addChildNode(floorNode)
         }
        
-        
-       
-      
-        
-    }
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.view.addSubview(sceneView)
-        sceneView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
-        sceneView.frame = self.view.bounds
-        sceneView.setup()
-        sceneView.allowsCameraControl = true
-       
-        createEnvironment()
-        
+        // Sun
         let sunSphere = SCNSphere(radius: 0.1)
         sunNode.geometry = sunSphere
         sunSphere.firstMaterial?.diffuse.contents = UIImage(named:"art.scnassets/sunTexture.jpg")
         sunNode.addAnimation(spinAnimation(duration: 40), forKey: "spin")
         sunNode.position = SCNVector3Make(0, 0, -2)
-  
-
         scene.rootNode.addChildNode(sunNode)
         
         
         for body in bodies {
             
             let sphere = SCNSphere(radius: 0.005 * body.diameter)
-           //  sphere.segmentCount = 30
+            //  sphere.segmentCount = 30
             sphere.firstMaterial?.diffuse.contents = UIImage(named:"art.scnassets/\(body.name!)Texture.jpg")
             
-           // sphere.firstMaterial?.fillMode = .lines
-        
+            // sphere.firstMaterial?.fillMode = .lines
+            
             let node = SCNNode()
             //node.opacity = 0.6
             node.geometry?.firstMaterial?.transparencyMode = .rgbZero
@@ -198,9 +156,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 node.addAnimation(spinAnimation(duration: 3 * body.rotationPeriod), forKey: "spin")
                 
             }
-          
+            
             let rotateAction = SCNAction.rotateAround(center: sunNode.position, radius: 0.5 * body.distance, animationDuration: 10 * body.period)
-          
+            
             for moon in body.moons {
                 
                 let moonSphere = SCNSphere(radius: moon.size)
@@ -210,7 +168,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 moonNode.position = SCNVector3Make(0, 0, 0)
                 
                 let moonRotateAction = SCNAction.rotateAround(center: SCNVector3(0,0,0), radius: moon.distance, animationDuration: moon.period)
-            
+                
                 moonNode.runAction(moonRotateAction)
                 node.addChildNode(moonNode)
                 
@@ -230,66 +188,50 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             
             if (node.name == "earth"){
                 
-
-//                guard let virtualObjectScene = SCNScene(named: "art.scnassets/SimpleEarth/EarthPlanet.DAE") else {
-//                    return
-//                }
-//                for child in virtualObjectScene.rootNode.childNodes {
-//                    child.geometry?.firstMaterial?.lightingModel = .physicallyBased
-//                    node.addChildNode(child)
-//
-//                }
-                //node.scale = SCNVector3(0.0001, 0.0001, 0.0001)
-//                node.scale = SCNVector3(0.01, 0.01, 0.01)
-                //scene.rootNode.addChildNode(node) // nest inside seasonal title
                 earth = node
-            
-//                seasonalTilt.addChildNode()
-//
-//                // tilt it on it's axis (23.5 degrees), varied by the actual day of the year
-//                // (note that children nodes are correctly tilted with the parents coordinate space)
-//                let calendar = Calendar(identifier: .gregorian)
-//                let dayOfYear = Double( calendar.ordinality(of: .day, in: .year, for: Date())! )
-//                let daysSinceWinterSolstice = remainder(dayOfYear + 10.0, kDaysInAYear)
-//                let daysSinceWinterSolsticeInRadians = daysSinceWinterSolstice * 2.0 * Double.pi / kDaysInAYear
-//                let tiltXRadians = -cos( daysSinceWinterSolsticeInRadians) * kTiltOfEarthsAxisInRadians
-//                //
-//                seasonalTilt.eulerAngles = SCNVector3(x: Float(tiltXRadians), y: 0.0, z: 0)
+                
+                //                seasonalTilt.addChildNode()
+                //
+                //                // tilt it on it's axis (23.5 degrees), varied by the actual day of the year
+                //                // (note that children nodes are correctly tilted with the parents coordinate space)
+                //                let calendar = Calendar(identifier: .gregorian)
+                //                let dayOfYear = Double( calendar.ordinality(of: .day, in: .year, for: Date())! )
+                //                let daysSinceWinterSolstice = remainder(dayOfYear + 10.0, kDaysInAYear)
+                //                let daysSinceWinterSolsticeInRadians = daysSinceWinterSolstice * 2.0 * Double.pi / kDaysInAYear
+                //                let tiltXRadians = -cos( daysSinceWinterSolsticeInRadians) * kTiltOfEarthsAxisInRadians
+                //                //
+                //                seasonalTilt.eulerAngles = SCNVector3(x: Float(tiltXRadians), y: 0.0, z: 0)
                 scene.rootNode.addChildNode(node)
                 constrainCameraToPlanetNode(node)
-                
 
-             
             }else{
                 scene.rootNode.addChildNode(node)
             }
         }
         
-       // self.sceneView.debugOptions = [.showPhysicsShapes,.showWireframe,.showSkeletons, .showConstraints, .showLightExtents, ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
-        sceneView.showsStatistics = true
+    }
+
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.view.addSubview(sceneView)
+        sceneView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
+        sceneView.frame = self.view.bounds
+        sceneView.setup()
+//        sceneView.showDebug()
         sceneView.delegate = self
         sceneView.scene = scene
-        sceneView.scene.lightingEnvironment.intensity = 25
         
-      
+        createEnvironment()
         
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
-        
-       
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         moMan.deviceMotionUpdateInterval = 1.0/60.0
-        
-        
-        // Create a session configuration
-        let configuration = ARWorldTrackingConfiguration()
-        configuration.planeDetection = .horizontal
-        // Run the view's session
-        sceneView.session.run(configuration)
     
         listenForCoreMotionChanges()
     }
@@ -315,12 +257,30 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-        sceneView.pointOfView?.position = cameraHandle.presentation.position
-        sceneView.pointOfView?.rotation = cameraHandle.presentation.rotation
-        sceneView.pointOfView?.orientation = cameraHandle.presentation.orientation
         
+
     }
 
+    func focusOnEarth(){
+        //if let cc = camCoords.getCameraCoordinates(sceneView: sceneView){
+        //   cameraHandle.position = SCNVector3(cc.x, cc.y, cc.z - 1)
+        //      /    //  sceneView.scene.rootNode.addChildNode(node)
+        //}
+        //
+        
+        
+        //        print("earth position:",earth?.position)
+        var zoomedOutEarthCameraPosition = earth?.position
+        zoomedOutEarthCameraPosition?.z = -1
+        cameraHandle.position = zoomedOutEarthCameraPosition!
+        sceneView.pointOfView?.position = cameraHandle.position
+        sceneView.pointOfView?.rotation = cameraHandle.rotation
+        
+        //        sceneView.pointOfView?.position = zoomedOutEarthCameraPosition!
+        /*sceneView.pointOfView?.position = cameraHandle.presentation.position
+         sceneView.pointOfView?.rotation = cameraHandle.presentation.rotation
+         sceneView.pointOfView?.orientation = cameraHandle.presentation.orientation*/
+    }
     
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
         print(node)
@@ -368,9 +328,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     func constrainCameraToPlanetNode(_ node:SCNNode){
         cameraHandle.constraints = [ SCNLookAtConstraint(target: node) ]
-       
-
-
     }
 }
 
