@@ -25,7 +25,7 @@ extension ARSCNView {
         preferredFramesPerSecond = 60
         contentScaleFactor = 1
         
-        allowsCameraControl = true
+        //allowsCameraControl = true
        
         showsStatistics = true
 

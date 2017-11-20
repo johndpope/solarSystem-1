@@ -45,7 +45,7 @@ extension ViewController:CLLocationManagerDelegate{
             // make this one white!
             zz.node.geometry!.firstMaterial!.diffuse.contents = "whiteGlow-32x32.png"
             earth?.addChildNode(zz.node)
-            constrainCameraToPlanetNode(zz.node)
+//            constrainCameraToPlanetNode(zz.node) -- attempt to lock on current location
             myLocationNode = zz
         }
         

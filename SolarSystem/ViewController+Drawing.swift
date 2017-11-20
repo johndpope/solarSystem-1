@@ -15,6 +15,48 @@ import CoreLocation
 
 extension ViewController{
     
+    func spinAnimation(duration: Double) -> CABasicAnimation {
+        
+        let spin = CABasicAnimation(keyPath: "rotation")
+        
+        spin.fromValue = NSValue(scnVector4: SCNVector4(x: 0, y: 1, z: 0, w: 0))
+        spin.toValue = NSValue(scnVector4: SCNVector4(x: 0, y: 1, z: 0, w: Float(2 * CGFloat.pi)))
+        spin.duration = duration
+        spin.repeatCount = .infinity
+        
+        return spin
+    }
+    
+    
+    func addNodeToSceneView(node:SCNNode,at position: SCNVector3){
+        node.position = position
+        sceneView.scene.rootNode.addChildNode(node)
+    }
+    
+    func addNodeToPointOfView(node:SCNNode){
+        self.sceneView.pointOfView?.addChildNode(node)
+    }
+    
+    func addNodeAtCameraPosition(node:SCNNode){
+        if let cc = camCoords.getCameraCoordinates(sceneView: sceneView){
+            node.position = SCNVector3(cc.x, cc.y, cc.z)
+            sceneView.scene.rootNode.addChildNode(node)
+        }
+        
+    }
+    
+    func placeNodeInfrontOfCamera(node:SCNNode) {
+        let pointOfView = self.sceneView.pointOfView
+        node.simdPosition = pointOfView!.simdPosition + (pointOfView?.simdWorldFront)! * 2
+        sceneView.scene.rootNode.addChildNode(node)
+    }
+    
+    
+    
+    func constrainCameraToPlanetNode(_ node:SCNNode){
+        cameraHandle.constraints = [ SCNLookAtConstraint(target: node) ]
+    }
+    
     func addNorthSouthPoles(node:SCNNode){
         let northPole = GlobeGlowPoint(lat: 90,lon: 0)
         let southPole = GlobeGlowPoint(lat: -90,lon: 0)

@@ -13,6 +13,13 @@
 		834C950B1FC13EB1005E15E6 /* GyroScene.scn in Resources */ = {isa = PBXBuildFile; fileRef = 834C950A1FC13EB1005E15E6 /* GyroScene.scn */; };
 		836E92391FC2467000D0B1FF /* VirtualObjectARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836E92381FC2467000D0B1FF /* VirtualObjectARView.swift */; };
 		836E923B1FC248EC00D0B1FF /* ViewController+CoreMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836E923A1FC248EC00D0B1FF /* ViewController+CoreMotion.swift */; };
+		83708A711FC35DEC00C0A9B3 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83708A701FC35DEC00C0A9B3 /* GameViewController.swift */; };
+		83708A771FC35EE300C0A9B3 /* earth-diffuse-mini.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 83708A721FC35EE200C0A9B3 /* earth-diffuse-mini.jpg */; };
+		83708A781FC35EE300C0A9B3 /* moon.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 83708A731FC35EE200C0A9B3 /* moon.jpg */; };
+		83708A791FC35EE300C0A9B3 /* sun-halo.png in Resources */ = {isa = PBXBuildFile; fileRef = 83708A741FC35EE300C0A9B3 /* sun-halo.png */; };
+		83708A7A1FC35EE300C0A9B3 /* sun.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 83708A751FC35EE300C0A9B3 /* sun.jpg */; };
+		83708A7B1FC35EE300C0A9B3 /* orbit.png in Resources */ = {isa = PBXBuildFile; fileRef = 83708A761FC35EE300C0A9B3 /* orbit.png */; };
+		83708A7D1FC3612000C0A9B3 /* ViewController+ARSCNView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83708A7C1FC3611F00C0A9B3 /* ViewController+ARSCNView.swift */; };
 		83D68AA71FC1EBCE00C5405C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFF1E8A1F19442E00768AB9 /* ViewController.swift */; };
 		83D68AA91FC1EE7000C5405C /* ViewController+Gestures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D68AA81FC1EE7000C5405C /* ViewController+Gestures.swift */; };
 		83D68AAE1FC1EEC500C5405C /* ARGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D68AAB1FC1EEC500C5405C /* ARGesture.swift */; };
@@ -29,6 +36,7 @@
 		83F1776B1FC3243E000A12A1 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F1776A1FC3243E000A12A1 /* Camera.swift */; };
 		83F1776D1FC33DCE000A12A1 /* ViewController+Drawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F1776C1FC33DCD000A12A1 /* ViewController+Drawing.swift */; };
 		83F1776F1FC34062000A12A1 /* CylinderLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F1776E1FC34061000A12A1 /* CylinderLine.swift */; };
+		83F177711FC35C73000A12A1 /* SkyboxScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F177701FC35C73000A12A1 /* SkyboxScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +50,13 @@
 		834C95121FC1EA70005E15E6 /* SceneKitDemo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneKitDemo.swift; sourceTree = "<group>"; };
 		836E92381FC2467000D0B1FF /* VirtualObjectARView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualObjectARView.swift; sourceTree = "<group>"; };
 		836E923A1FC248EC00D0B1FF /* ViewController+CoreMotion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+CoreMotion.swift"; sourceTree = "<group>"; };
+		83708A701FC35DEC00C0A9B3 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		83708A721FC35EE200C0A9B3 /* earth-diffuse-mini.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "earth-diffuse-mini.jpg"; sourceTree = "<group>"; };
+		83708A731FC35EE200C0A9B3 /* moon.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = moon.jpg; sourceTree = "<group>"; };
+		83708A741FC35EE300C0A9B3 /* sun-halo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sun-halo.png"; sourceTree = "<group>"; };
+		83708A751FC35EE300C0A9B3 /* sun.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sun.jpg; sourceTree = "<group>"; };
+		83708A761FC35EE300C0A9B3 /* orbit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = orbit.png; sourceTree = "<group>"; };
+		83708A7C1FC3611F00C0A9B3 /* ViewController+ARSCNView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+ARSCNView.swift"; sourceTree = "<group>"; };
 		83D68AA81FC1EE7000C5405C /* ViewController+Gestures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+Gestures.swift"; sourceTree = "<group>"; };
 		83D68AAB1FC1EEC500C5405C /* ARGesture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARGesture.swift; sourceTree = "<group>"; };
 		83D68AAC1FC1EEC500C5405C /* SCNNode+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SCNNode+Extension.swift"; sourceTree = "<group>"; };
@@ -57,6 +72,7 @@
 		83F1776A1FC3243E000A12A1 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		83F1776C1FC33DCD000A12A1 /* ViewController+Drawing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+Drawing.swift"; sourceTree = "<group>"; };
 		83F1776E1FC34061000A12A1 /* CylinderLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CylinderLine.swift; sourceTree = "<group>"; };
+		83F177701FC35C73000A12A1 /* SkyboxScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkyboxScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,7 +123,9 @@
 				83F1776C1FC33DCD000A12A1 /* ViewController+Drawing.swift */,
 				836E923A1FC248EC00D0B1FF /* ViewController+CoreMotion.swift */,
 				83D68AA81FC1EE7000C5405C /* ViewController+Gestures.swift */,
+				83708A7C1FC3611F00C0A9B3 /* ViewController+ARSCNView.swift */,
 				836E92381FC2467000D0B1FF /* VirtualObjectARView.swift */,
+				83708A701FC35DEC00C0A9B3 /* GameViewController.swift */,
 			);
 			path = SolarSystem;
 			sourceTree = "<group>";
@@ -115,6 +133,7 @@
 		83D68AAA1FC1EEC500C5405C /* Extras */ = {
 			isa = PBXGroup;
 			children = (
+				83F177701FC35C73000A12A1 /* SkyboxScene.swift */,
 				83D68AB71FC2270B00C5405C /* MyCameraCoordinates.swift */,
 				83D68AB11FC1EEDD00C5405C /* BaseNode.swift */,
 				83D68AAB1FC1EEC500C5405C /* ARGesture.swift */,
@@ -127,6 +146,11 @@
 		83D68AC21FC238A000C5405C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				83708A721FC35EE200C0A9B3 /* earth-diffuse-mini.jpg */,
+				83708A731FC35EE200C0A9B3 /* moon.jpg */,
+				83708A761FC35EE300C0A9B3 /* orbit.png */,
+				83708A741FC35EE300C0A9B3 /* sun-halo.png */,
+				83708A751FC35EE300C0A9B3 /* sun.jpg */,
 				83D68AC31FC238A000C5405C /* yellowGlow-32x32.png */,
 				83D68AC41FC238A000C5405C /* whiteGlow-32x32.png */,
 			);
@@ -191,12 +215,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83708A791FC35EE300C0A9B3 /* sun-halo.png in Resources */,
+				83708A7B1FC35EE300C0A9B3 /* orbit.png in Resources */,
+				83708A781FC35EE300C0A9B3 /* moon.jpg in Resources */,
+				83708A7A1FC35EE300C0A9B3 /* sun.jpg in Resources */,
 				2FFF1E931F19442E00768AB9 /* LaunchScreen.storyboard in Resources */,
 				83D68AC51FC238A100C5405C /* yellowGlow-32x32.png in Resources */,
 				83D68ABF1FC228A700C5405C /* art.scnassets in Resources */,
 				2FFF1E901F19442E00768AB9 /* Assets.xcassets in Resources */,
 				834C950B1FC13EB1005E15E6 /* GyroScene.scn in Resources */,
 				83D68AC61FC238A100C5405C /* whiteGlow-32x32.png in Resources */,
+				83708A771FC35EE300C0A9B3 /* earth-diffuse-mini.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -211,6 +240,8 @@
 				83D68AA71FC1EBCE00C5405C /* ViewController.swift in Sources */,
 				83D68AC81FC238EE00C5405C /* SwiftGlobe.swift in Sources */,
 				83D68AB61FC2132200C5405C /* SkyMapViewController.swift in Sources */,
+				83708A7D1FC3612000C0A9B3 /* ViewController+ARSCNView.swift in Sources */,
+				83708A711FC35DEC00C0A9B3 /* GameViewController.swift in Sources */,
 				83D68AB81FC2270B00C5405C /* MyCameraCoordinates.swift in Sources */,
 				83F1776D1FC33DCE000A12A1 /* ViewController+Drawing.swift in Sources */,
 				83D68AAE1FC1EEC500C5405C /* ARGesture.swift in Sources */,
@@ -221,6 +252,7 @@
 				83D68AAF1FC1EEC500C5405C /* SCNNode+Extension.swift in Sources */,
 				2FFF1E871F19442E00768AB9 /* AppDelegate.swift in Sources */,
 				83F1776B1FC3243E000A12A1 /* Camera.swift in Sources */,
+				83F177711FC35C73000A12A1 /* SkyboxScene.swift in Sources */,
 				83D68AB21FC1EEDD00C5405C /* BaseNode.swift in Sources */,
 				83F1776F1FC34062000A12A1 /* CylinderLine.swift in Sources */,
 			);
