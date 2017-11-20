@@ -168,7 +168,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.setup()
         sceneView.allowsCameraControl = true
        
-        createEnvironment()
+//        createEnvironment()
         
         let sunSphere = SCNSphere(radius: 0.1)
         sunNode.geometry = sunSphere
@@ -228,16 +228,16 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             if (node.name == "earth"){
                 
 
-                guard let virtualObjectScene = SCNScene(named: "art.scnassets/SimpleEarth/EarthPlanet.DAE") else {
-                    return
-                }
-                for child in virtualObjectScene.rootNode.childNodes {
-                    child.geometry?.firstMaterial?.lightingModel = .physicallyBased
-                    node.addChildNode(child)
-                   
-                }
+//                guard let virtualObjectScene = SCNScene(named: "art.scnassets/SimpleEarth/EarthPlanet.DAE") else {
+//                    return
+//                }
+//                for child in virtualObjectScene.rootNode.childNodes {
+//                    child.geometry?.firstMaterial?.lightingModel = .physicallyBased
+//                    node.addChildNode(child)
+//
+//                }
                 //node.scale = SCNVector3(0.0001, 0.0001, 0.0001)
-                node.scale = SCNVector3(0.01, 0.01, 0.01)
+//                node.scale = SCNVector3(0.01, 0.01, 0.01)
                 //scene.rootNode.addChildNode(node) // nest inside seasonal title
                 earth = node
             
@@ -253,11 +253,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 //
                 seasonalTilt.eulerAngles = SCNVector3(x: Float(tiltXRadians), y: 0.0, z: 0)
                 scene.rootNode.addChildNode(seasonalTilt)
-                //constrainCameraToPlanetNode(earth!)
-//                let constraint = SCNLookAtConstraint(target: earth!)
-//                constraint.isGimbalLockEnabled = true
-//               cameraNode.constraints = [ constraint ]
-                
+
              
             }else{
                 scene.rootNode.addChildNode(node)
@@ -314,7 +310,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-        lockCameraOnNode(node: earth!)
+        lockCameraOnNode(node: seasonalTilt)
         //earth?.look(at: sceneView.pointOfView!, offset: nil)
     }
 
@@ -325,9 +321,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         print("current POV:",sceneView.pointOfView?.position)
         
         print("x:\(nodePosition.x) y:\(nodePosition.y) z:\(nodePosition.z)")
-      //  let newNodePosition =  SCNVector3(x: nodePosition.x, y: nodePosition.y, z: nodePosition.z - 10)
-        
-        sceneView.pointOfView?.position = nodePosition
+        let newNodePosition =  SCNVector3(x: nodePosition.x, y: nodePosition.y, z: nodePosition.z )
+        // how to zoom back to include picture of earth????
+        sceneView.pointOfView?.position = newNodePosition
         sceneView.pointOfView?.rotation = nodeRotation
 
 
