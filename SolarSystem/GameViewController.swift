@@ -9,16 +9,11 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
     var scnView:ARSCNView!
      let scene = SCNScene()
     let earthRotationNode = SCNNode()
+     let earthNode = SCNNode()
     
-    // Camera manipulation
+    // Camera
     var camera = SCNCamera()
-    let cameraHandle = SCNNode()
     let cameraNode = SCNNode()
-    var cameraHandleTransforms:SCNMatrix4?
-    var initialOffset:CGPoint = CGPoint(x:0, y:0)
-    var lastOffset:CGPoint?
-    var lastSpinOffset:CGPoint?
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,7 +73,7 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
         earthGroupNode.position = SCNVector3(15, 0, 0)
         earthRotationNode.addChildNode(earthGroupNode)
         
-        let earthNode = SCNNode()
+       
         let earth = SCNSphere(radius: 1.5)
         earth.firstMaterial?.diffuse.contents = UIImage(named: "earth-diffuse-mini.jpg")
         earthNode.geometry = earth
@@ -153,7 +148,7 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
         scnView.backgroundColor = UIColor.black
         scnView.delegate = self
         createCamera()
-        cameraHandle.constraints = [ SCNLookAtConstraint(target: earthRotationNode) ]
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -171,54 +166,25 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-        recenterEarthToPositionOfCamera(renderer,scene)
-        
+       recenterEarthToPositionOfCamera(renderer,scene)
     }
     
     
     func createCamera(){
-        cameraNode.position = SCNVector3Make(0, 0, 0.01)
-        //create a node to manipulate the camera orientation
-        cameraHandle.position = SCNVector3Make(0, 0, -0.01)
-        let cameraOrientation = SCNNode()
-        cameraHandle.addChildNode(cameraOrientation)
-        cameraOrientation.addChildNode(cameraNode)
+        cameraNode.position = SCNVector3Make(0, 0, -2)
         cameraNode.camera = camera
+        camera.usesOrthographicProjection = true
         cameraNode.camera?.zFar = 800 // ???
         cameraNode.camera?.fieldOfView = 55 // ???
-        
-        // add an ambient light
-        let ambientLightNode = SCNNode()
-        ambientLightNode.light = SCNLight()
-        ambientLightNode.light?.type = .ambient
-        ambientLightNode.light?.color = SKColor(white: 0.3, alpha: 1.0)
-        scene.rootNode.addChildNode(ambientLightNode)
-        //add a key light to the scene
-        let spotLightParentNode = SCNNode()
-        spotLightParentNode.position = SCNVector3Make(0, 0, 0)
-        let spotLightNode = SCNNode()
-        spotLightNode.light = SCNLight()
-        spotLightNode.light?.type = .spot
-        spotLightNode.light?.color = SKColor(white: 1.0, alpha: 1.0)
-        spotLightNode.light?.castsShadow = true
-        spotLightNode.light?.shadowColor = SKColor(white: 0.0, alpha: 0.5)
-        spotLightNode.light?.zNear = 30
-        spotLightNode.light?.zFar = 800
-        spotLightNode.light?.shadowRadius = 1.0
-        spotLightNode.light?.spotInnerAngle = 15
-        spotLightNode.light?.spotOuterAngle = 70
-        cameraNode.addChildNode(spotLightParentNode)
-        spotLightParentNode.addChildNode(spotLightNode)
-        
-        
-        
-        // TODO clarify if it's more accurate to attach cameraHandle to scene or point of view.
-        //scene.rootNode.addChildNode(cameraHandle)
-        print("👀 - attaching cameraHandle to sceneView.pointOfView ")
-        scnView.pointOfView?.addChildNode(cameraHandle)
-        
+        print("👀 - creating cameraNode constraint to earthNode ")
+        cameraNode.constraints = [ SCNLookAtConstraint(target: earthNode) ]
+        print("👀 - attaching cameraNode to earth ")
+        self.earthNode.addChildNode(cameraNode)
+        print("👀 - making the point of view the camera ")
+       self.scnView.pointOfView = cameraNode
         
     }
+    
     func recenterEarthToPositionOfCamera(_ renderer:SCNSceneRenderer, _ scene: SCNScene){
         // The node provides the position and direction of a virtual camera, and the camera object provides rendering parameters such as field of view and focus.
         guard let pointOfView = renderer.pointOfView else { return }
@@ -226,16 +192,17 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
         let orientation = SCNVector3(-transform.m31, -transform.m32, -transform.m33)
         let location = SCNVector3(transform.m41, transform.m42, transform.m43)
         let currentPositionOfCamera = orientation + location
+//        cameraNode.position = currentPositionOfCamera
+
         
-        
-        DispatchQueue.main.async {
-             let earthPosition = self.earthRotationNode.position
-//                let earthOffset = earthPosition - currentPositionOfCamera
-                self.cameraNode.position = earthPosition
-                //self.cameraHandle.orientation = orientation
-                self.scnView.pointOfView = self.cameraNode
+       /* DispatchQueue.main.async {
+             let earthPosition = self.earthNode.position
+             let earthRotation =  self.earthNode.rotation
+             let earthOffset = earthPosition - currentPositionOfCamera
+            .position = earthOffset
+            self.scnView.pointOfView?.rotation = earthRotation
             
-        }
+        }*/
     }
     
     func session(_ session: ARSession, didFailWithError error: Error) {}
