@@ -47,14 +47,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
         let sunSphere = SCNSphere(radius: 0.3)
         sunNode.geometry = sunSphere
-        sunNode.geometry?.firstMaterial?.fillMode = .lines
+        //sunNode.geometry?.firstMaterial?.fillMode = .lines
         sunNode.addAnimation(spinAnimation(duration: 40), forKey: "spin")
         sunNode.position = SCNVector3Make(0, 0, 0)
   
-        
-        celestialEquatorTilt.eulerAngles = SCNVector3(x: 0, y: 0.0, z: -2)
-        celestialEquatorTilt.addChildNode(sunNode)
-        scene.rootNode.addChildNode(celestialEquatorTilt)
+
+        scene.rootNode.addChildNode(sunNode)
         
         
         for body in bodies {
@@ -62,7 +60,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             let sphere = SCNSphere(radius: 0.005 * body.diameter)
              sphere.segmentCount = 30
             sphere.firstMaterial?.diffuse.contents = UIImage(named:"art.scnassets/\(body.name!)Texture.jpg")
-            sphere.firstMaterial?.fillMode = .lines
+            //sphere.firstMaterial?.fillMode = .lines
         
             let node = SCNNode()
             node.name = body.name!
@@ -129,16 +127,16 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 let tiltXRadians = -cos( daysSinceWinterSolsticeInRadians) * kTiltOfEarthsAxisInRadians
                 //
                 seasonalTilt.eulerAngles = SCNVector3(x: Float(tiltXRadians), y: 0.0, z: 0)
-                celestialEquatorTilt.addChildNode(seasonalTilt)
+                scene.rootNode.addChildNode(seasonalTilt)
                 
                 //
              
             }else{
-                celestialEquatorTilt.addChildNode(node)
+                scene.rootNode.addChildNode(node)
             }
         }
         
-        self.sceneView.debugOptions = [.showPhysicsShapes,.showWireframe,.showSkeletons, .showConstraints, .showLightExtents, ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
+       // self.sceneView.debugOptions = [.showPhysicsShapes,.showWireframe,.showSkeletons, .showConstraints, .showLightExtents, ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
         sceneView.showsStatistics = true
         sceneView.delegate = self
         sceneView.scene = scene
