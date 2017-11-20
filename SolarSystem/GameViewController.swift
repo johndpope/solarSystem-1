@@ -4,7 +4,7 @@ import UIKit
 import ARKit
 import SceneKit
 
-class GameViewController: UIViewController, ARSCNViewDelegate {
+class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate {
     
     var scnView:ARSCNView!
      let scene = SCNScene()
@@ -185,6 +185,12 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
         
     }
     
+    func session(_ session: ARSession, didUpdate frame: ARFrame) {
+        // Do something with the new transform
+        let currentTransform = frame.camera.transform
+        print("currentTransform:", currentTransform)
+    }
+    
     func recenterEarthToPositionOfCamera(_ renderer:SCNSceneRenderer, _ scene: SCNScene){
         // The node provides the position and direction of a virtual camera, and the camera object provides rendering parameters such as field of view and focus.
         guard let pointOfView = renderer.pointOfView else { return }
@@ -208,4 +214,38 @@ class GameViewController: UIViewController, ARSCNViewDelegate {
     func session(_ session: ARSession, didFailWithError error: Error) {}
     func sessionWasInterrupted(_ session: ARSession) {}
     func sessionInterruptionEnded(_ session: ARSession) {}
+    
+    
+    func updateState(for frame: ARFrame, trackingState: ARCamera.TrackingState) {
+        switch trackingState {
+        case .normal
+            where frame.anchors.isEmpty:
+            state = .normalEmptyAnchors
+        case .normal:
+            state = .normal(focusContainer.selectedSurface != nil)
+        case .notAvailable:
+            state = .notAvailable
+        case .limited(.excessiveMotion):
+            state = .limitedExcessiveMotion
+        case .limited(.insufficientFeatures):
+            state = .limitedInsufficientFeatures
+        case .limited(.initializing):
+            state = .limitedInitializing
+        }
+    }
+    
+    public func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
+        guard let frame = session.currentFrame else { return }
+        updateState(for: frame, trackingState: frame.camera.trackingState)
+    }
+    
+    public func session(_ session: ARSession, didRemove anchors: [ARAnchor]) {
+        guard let frame = session.currentFrame else { return }
+        updateState(for: frame, trackingState: frame.camera.trackingState)
+    }
+    
+    public func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
+        guard let frame = session.currentFrame else { return }
+        updateState(for: frame, trackingState: camera.trackingState)
+    }
 }
