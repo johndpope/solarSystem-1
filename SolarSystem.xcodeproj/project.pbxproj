@@ -12,6 +12,7 @@
 		2FFF1E931F19442E00768AB9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FFF1E911F19442E00768AB9 /* LaunchScreen.storyboard */; };
 		834C950B1FC13EB1005E15E6 /* GyroScene.scn in Resources */ = {isa = PBXBuildFile; fileRef = 834C950A1FC13EB1005E15E6 /* GyroScene.scn */; };
 		836E92391FC2467000D0B1FF /* VirtualObjectARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836E92381FC2467000D0B1FF /* VirtualObjectARView.swift */; };
+		836E923B1FC248EC00D0B1FF /* ViewController+CoreMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836E923A1FC248EC00D0B1FF /* ViewController+CoreMotion.swift */; };
 		83D68AA71FC1EBCE00C5405C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFF1E8A1F19442E00768AB9 /* ViewController.swift */; };
 		83D68AA91FC1EE7000C5405C /* ViewController+Gestures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D68AA81FC1EE7000C5405C /* ViewController+Gestures.swift */; };
 		83D68AAE1FC1EEC500C5405C /* ARGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D68AAB1FC1EEC500C5405C /* ARGesture.swift */; };
@@ -37,6 +38,7 @@
 		834C950A1FC13EB1005E15E6 /* GyroScene.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = GyroScene.scn; sourceTree = "<group>"; };
 		834C95121FC1EA70005E15E6 /* SceneKitDemo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneKitDemo.swift; sourceTree = "<group>"; };
 		836E92381FC2467000D0B1FF /* VirtualObjectARView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualObjectARView.swift; sourceTree = "<group>"; };
+		836E923A1FC248EC00D0B1FF /* ViewController+CoreMotion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+CoreMotion.swift"; sourceTree = "<group>"; };
 		83D68AA81FC1EE7000C5405C /* ViewController+Gestures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+Gestures.swift"; sourceTree = "<group>"; };
 		83D68AAB1FC1EEC500C5405C /* ARGesture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARGesture.swift; sourceTree = "<group>"; };
 		83D68AAC1FC1EEC500C5405C /* SCNNode+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SCNNode+Extension.swift"; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 		2FFF1E851F19442E00768AB9 /* SolarSystem */ = {
 			isa = PBXGroup;
 			children = (
+				83D68AB51FC2132100C5405C /* SkyMapViewController.swift */,
 				83D68AC71FC238ED00C5405C /* SwiftGlobe.swift */,
 				83D68AC21FC238A000C5405C /* Resources */,
 				83D68ABE1FC228A700C5405C /* art.scnassets */,
@@ -92,8 +95,8 @@
 				2FFF1E911F19442E00768AB9 /* LaunchScreen.storyboard */,
 				834C95121FC1EA70005E15E6 /* SceneKitDemo.swift */,
 				2FFF1E8A1F19442E00768AB9 /* ViewController.swift */,
-				83D68AB51FC2132100C5405C /* SkyMapViewController.swift */,
 				83D68AC91FC23BEC00C5405C /* ViewController+CoreLocation.swift */,
+				836E923A1FC248EC00D0B1FF /* ViewController+CoreMotion.swift */,
 				83D68AA81FC1EE7000C5405C /* ViewController+Gestures.swift */,
 				836E92381FC2467000D0B1FF /* VirtualObjectARView.swift */,
 			);
@@ -203,6 +206,7 @@
 				83D68AAE1FC1EEC500C5405C /* ARGesture.swift in Sources */,
 				83D68ACA1FC23BEC00C5405C /* ViewController+CoreLocation.swift in Sources */,
 				83D68AB01FC1EEC500C5405C /* Extensions.swift in Sources */,
+				836E923B1FC248EC00D0B1FF /* ViewController+CoreMotion.swift in Sources */,
 				83D68AA91FC1EE7000C5405C /* ViewController+Gestures.swift in Sources */,
 				83D68AAF1FC1EEC500C5405C /* SCNNode+Extension.swift in Sources */,
 				2FFF1E871F19442E00768AB9 /* AppDelegate.swift in Sources */,

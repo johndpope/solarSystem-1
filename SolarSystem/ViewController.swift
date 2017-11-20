@@ -314,23 +314,26 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-        //lockCameraOnNode(node: earth!)
+        lockCameraOnNode(node: earth!)
         //earth?.look(at: sceneView.pointOfView!, offset: nil)
     }
 
     func lockCameraOnNode(node: SCNNode){
-//        let nodePosition = node.presentation.position
+        let nodePosition = node.presentation.position
+        let nodeRotation = node.presentation.rotation
         
-//        print("current POV:",sceneView.pointOfView?.position)
+        print("current POV:",sceneView.pointOfView?.position)
         
-//        print("x:\(nodePosition.x) y:\(nodePosition.y) z:\(nodePosition.z)")
+        print("x:\(nodePosition.x) y:\(nodePosition.y) z:\(nodePosition.z)")
 //        node.position = SCNVector3(x: nodePosition.x+80, y: nodePosition.y+80, z: nodePosition.z+80)
         
 //        if let cc = camCoords.getCameraCoordinates(sceneView: sceneView){
       //      node.position = SCNVector3(cc.x, cc.y, cc.z)
 //        }
         
-//        sceneView.pointOfView = node
+        sceneView.pointOfView?.position = nodePosition
+        sceneView.pointOfView?.rotation = nodeRotation
+
 
     }
     
@@ -389,34 +392,34 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         cameraNode.constraints = [constraint]
     }
     
-    func constrainCameraToPlanetNode(_ node:SCNNode){
-        // MERGE LOGIC FOR CAMERA FROM https://github.com/dmojdehi/SwiftGlobe
-        
-        // give us some ambient light (to light the rest of the model)
-        let ambientLight = SCNLight()
-        ambientLight.type = .ambient
-        ambientLight.intensity = 20.0 // default is 1000!
-        
-        //-----------------------------------
-        // Setup the camera node itself, which chases after the 'cameraGoal' but is always looking at the globe
-        // We use physics to follow the 'camera goal' smoothly
-        // (the user manipulates the goal, not the camera!)
-        // NB: SCNPhysicsBody requires a shape to be affected by the spring.
-        let fakeCameraShape = SCNPhysicsShape(geometry: SCNSphere(radius: 0.001), options: nil)
-        let cameraNodePhysics = SCNPhysicsBody(type: .dynamic, shape: fakeCameraShape)
-        cameraNodePhysics.isAffectedByGravity = false
-        cameraNodePhysics.categoryBitMask = kAffectedBySpring
-        cameraNodePhysics.damping = 2.0
-        //cameraNodePhysics.velocityFactor = SCNVector3(x:0.8, y:0.8, z: 0.8)
-        cameraNode.physicsBody = cameraNodePhysics
-        cameraNode.physicsBody?.allowsResting = false
-        cameraNode.constraints = [ SCNLookAtConstraint(target: node) ]
-        cameraNode.light = ambientLight
-        cameraNode.camera = camera
-        scene.rootNode.addChildNode(cameraNode)
-
-        
-    }
+//    func constrainCameraToPlanetNode(_ node:SCNNode){
+//        // MERGE LOGIC FOR CAMERA FROM https://github.com/dmojdehi/SwiftGlobe
+//
+//        // give us some ambient light (to light the rest of the model)
+//        let ambientLight = SCNLight()
+//        ambientLight.type = .ambient
+//        ambientLight.intensity = 20.0 // default is 1000!
+//
+//        //-----------------------------------
+//        // Setup the camera node itself, which chases after the 'cameraGoal' but is always looking at the globe
+//        // We use physics to follow the 'camera goal' smoothly
+//        // (the user manipulates the goal, not the camera!)
+//        // NB: SCNPhysicsBody requires a shape to be affected by the spring.
+//        let fakeCameraShape = SCNPhysicsShape(geometry: SCNSphere(radius: 0.001), options: nil)
+//        let cameraNodePhysics = SCNPhysicsBody(type: .dynamic, shape: fakeCameraShape)
+//        cameraNodePhysics.isAffectedByGravity = false
+//        cameraNodePhysics.categoryBitMask = kAffectedBySpring
+//        cameraNodePhysics.damping = 2.0
+//        //cameraNodePhysics.velocityFactor = SCNVector3(x:0.8, y:0.8, z: 0.8)
+//        cameraNode.physicsBody = cameraNodePhysics
+//        cameraNode.physicsBody?.allowsResting = false
+//        cameraNode.constraints = [ SCNLookAtConstraint(target: node) ]
+//        cameraNode.light = ambientLight
+//        cameraNode.camera = camera
+//        scene.rootNode.addChildNode(cameraNode)
+//
+//
+//    }
 }
 
 
