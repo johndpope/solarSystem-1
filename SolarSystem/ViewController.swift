@@ -172,7 +172,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         let sunSphere = SCNSphere(radius: 0.3)
         sunNode.geometry = sunSphere
-        //sunNode.geometry?.firstMaterial?.fillMode = .lines
+        sunSphere.firstMaterial?.diffuse.contents = UIImage(named:"art.scnassets/sunTexture.jpg")
         sunNode.addAnimation(spinAnimation(duration: 40), forKey: "spin")
         sunNode.position = SCNVector3Make(0, 0, -2)
   
@@ -254,9 +254,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 seasonalTilt.eulerAngles = SCNVector3(x: Float(tiltXRadians), y: 0.0, z: 0)
                 scene.rootNode.addChildNode(seasonalTilt)
                 //constrainCameraToPlanetNode(earth!)
-                let constraint = SCNLookAtConstraint(target: earth!)
-                constraint.isGimbalLockEnabled = true
-               cameraNode.constraints = [ constraint ]
+//                let constraint = SCNLookAtConstraint(target: earth!)
+//                constraint.isGimbalLockEnabled = true
+//               cameraNode.constraints = [ constraint ]
                 
              
             }else{
@@ -319,20 +319,20 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
 
     func lockCameraOnNode(node: SCNNode){
-        let nodePosition = node.presentation.position
+        var nodePosition = node.presentation.position
         let nodeRotation = node.presentation.rotation
         
         print("current POV:",sceneView.pointOfView?.position)
         
         print("x:\(nodePosition.x) y:\(nodePosition.y) z:\(nodePosition.z)")
-//        node.position = SCNVector3(x: nodePosition.x+80, y: nodePosition.y+80, z: nodePosition.z+80)
+        //nodePosition =  SCNVector3(x: nodePosition.x, y: nodePosition.y, z: nodePosition.z - 2)
         
 //        if let cc = camCoords.getCameraCoordinates(sceneView: sceneView){
       //      node.position = SCNVector3(cc.x, cc.y, cc.z)
 //        }
         
         sceneView.pointOfView?.position = nodePosition
-        sceneView.pointOfView?.rotation = nodeRotation
+       // sceneView.pointOfView?.rotation = nodeRotation
 
 
     }
