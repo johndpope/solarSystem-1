@@ -12,11 +12,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var camCoords = MyCameraCoordinates()
     var sceneView = VirtualObjectARView(frame:.zero)
     var seasonalTilt = SCNNode()
-    var scene: SCNScene!
+    var celestialEquatorTilt = SCNNode()
+    var scene = SCNScene()
     let moMan = CMMotionManager()
     var sunNode = SCNNode()
     var earth:SCNNode?
     var camera = SCNCamera()
+    var heading:Float  = 0.0
 
     var currentGesture: ARGesture?
     let cameraNode = SCNNode()
@@ -42,25 +44,25 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
         sceneView.frame = self.view.bounds
         sceneView.setup()
-        
-        scene = SCNScene()
-        
-        let sunSphere = SCNSphere(radius: 0.3)
 
+        let sunSphere = SCNSphere(radius: 0.3)
         sunNode.geometry = sunSphere
         sunNode.geometry?.firstMaterial?.fillMode = .lines
         sunNode.addAnimation(spinAnimation(duration: 40), forKey: "spin")
-        sunNode.position = SCNVector3Make(0, -0.2, -2)
-        //sunNode.isGimbalLockEnabled = true
-        scene.rootNode.addChildNode(sunNode)
-
+        sunNode.position = SCNVector3Make(0, 0, 0)
+  
+        
+        celestialEquatorTilt.eulerAngles = SCNVector3(x: 0, y: 0.0, z: -2)
+        celestialEquatorTilt.addChildNode(sunNode)
+        scene.rootNode.addChildNode(celestialEquatorTilt)
+        
         
         for body in bodies {
             
             let sphere = SCNSphere(radius: 0.005 * body.diameter)
              sphere.segmentCount = 30
             sphere.firstMaterial?.diffuse.contents = UIImage(named:"art.scnassets/\(body.name!)Texture.jpg")
-            //sphere.firstMaterial?.fillMode = .lines
+            sphere.firstMaterial?.fillMode = .lines
         
             let node = SCNNode()
             node.name = body.name!
@@ -111,8 +113,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                     node.addChildNode(child)
                    
                 }
-               // node.scale = SCNVector3(0.0001, 0.0001, 0.0001)
-                node.scale = SCNVector3(0.01, 0.01, 0.01)
+                node.scale = SCNVector3(0.0001, 0.0001, 0.0001)
+               // node.scale = SCNVector3(0.01, 0.01, 0.01)
                 //scene.rootNode.addChildNode(node) // nest inside seasonal title
                 earth = node
             
@@ -127,18 +129,20 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 let tiltXRadians = -cos( daysSinceWinterSolsticeInRadians) * kTiltOfEarthsAxisInRadians
                 //
                 seasonalTilt.eulerAngles = SCNVector3(x: Float(tiltXRadians), y: 0.0, z: 0)
-                scene.rootNode.addChildNode(seasonalTilt)
-               
+                celestialEquatorTilt.addChildNode(seasonalTilt)
+                
+                //
+             
             }else{
-                scene.rootNode.addChildNode(node)
+                celestialEquatorTilt.addChildNode(node)
             }
         }
         
-        self.sceneView.debugOptions = [.showPhysicsShapes,.showConstraints, .showLightExtents, ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
+        self.sceneView.debugOptions = [.showPhysicsShapes,.showWireframe,.showSkeletons, .showConstraints, .showLightExtents, ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
         sceneView.showsStatistics = true
         sceneView.delegate = self
         sceneView.scene = scene
-        
+        sceneView.scene.lightingEnvironment.intensity = 25
         
       
         
@@ -184,16 +188,21 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-        lockCameraOnNode(node: earth!)
+        //lockCameraOnNode(node: earth!)
+        //earth?.look(at: sceneView.pointOfView!, offset: nil)
     }
 
     func lockCameraOnNode(node: SCNNode){
-        let nodePosition = node.presentation.position
+//        let nodePosition = node.presentation.position
         
-        print("current POV:",sceneView.pointOfView?.position)
+//        print("current POV:",sceneView.pointOfView?.position)
         
-        print("x:\(nodePosition.x) y:\(nodePosition.y) z:\(nodePosition.z)")
-        node.position = SCNVector3(x: nodePosition.x+80, y: nodePosition.y+80, z: nodePosition.z+80)
+//        print("x:\(nodePosition.x) y:\(nodePosition.y) z:\(nodePosition.z)")
+//        node.position = SCNVector3(x: nodePosition.x+80, y: nodePosition.y+80, z: nodePosition.z+80)
+        
+//        if let cc = camCoords.getCameraCoordinates(sceneView: sceneView){
+      //      node.position = SCNVector3(cc.x, cc.y, cc.z)
+//        }
         
 //        sceneView.pointOfView = node
 
@@ -228,9 +237,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func addNodeAtCameraPosition(node:SCNNode){
-        let cc = camCoords.getCameraCoordinates(sceneView: sceneView)
-        node.position = SCNVector3(cc.x, cc.y, cc.z)
-        sceneView.scene.rootNode.addChildNode(node)
+        if let cc = camCoords.getCameraCoordinates(sceneView: sceneView){
+            node.position = SCNVector3(cc.x, cc.y, cc.z)
+            sceneView.scene.rootNode.addChildNode(node)
+        }
+        
     }
     
     func placeNodeInfrontOfCamera(node:SCNNode) {
@@ -281,4 +292,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
     }
 }
+
+
 

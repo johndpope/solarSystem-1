@@ -16,15 +16,17 @@ struct MyCameraCoordinates {
     var y = Float()
     var z = Float()
     
-    func getCameraCoordinates(sceneView: ARSCNView) -> MyCameraCoordinates {
-        let cameraTransform = sceneView.session.currentFrame?.camera.transform
-        let cameraCoordinates = MDLTransform(matrix: cameraTransform!)
+    func getCameraCoordinates(sceneView: ARSCNView) -> MyCameraCoordinates? {
+        if let cameraTransform = sceneView.session.currentFrame?.camera.transform{
+              let cameraCoordinates = MDLTransform(matrix: cameraTransform)
+            var cc = MyCameraCoordinates()
+            cc.x = cameraCoordinates.translation.x
+            cc.y = cameraCoordinates.translation.y
+            cc.z = cameraCoordinates.translation.z
+              return cc
+        }
+        return nil
         
-        var cc = MyCameraCoordinates()
-        cc.x = cameraCoordinates.translation.x
-        cc.y = cameraCoordinates.translation.y
-        cc.z = cameraCoordinates.translation.z
-        
-        return cc
+      
     }
 }
