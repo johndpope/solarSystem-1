@@ -8,9 +8,10 @@ import SceneKit
 class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate {
     
     var scnView:ARSCNView!
-     let scene = SCNScene()
+    let scene = SCNScene()
     let earthRotationNode = SCNNode()
-     let earthNode = SCNNode()
+    let earthNode = SCNNode()
+    let sunNode = SCNNode()
     
     // Camera
     var camera = SCNCamera()
@@ -46,7 +47,7 @@ class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate 
         baseNode.position = SCNVector3(0, 0, -15)
         scene.rootNode.addChildNode(baseNode)
         
-        let sunNode = SCNNode()
+      
         let sun = SCNSphere(radius: 2.5)
         sun.firstMaterial?.diffuse.contents = UIImage(named:"sun.jpg")
         sunNode.geometry = sun
@@ -165,9 +166,9 @@ class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate 
     }
     
     func addArText(){
-        let textScn = ARText(text: "text", font: UIFont.systemFont(ofSize: 25), color: UIColor .white, depth: 5)
+        let textScn = ARText(text: "sun", font: UIFont.systemFont(ofSize: 25), color: UIColor .white, depth: 5)
         let textNode = TextNode(distance: 1, scntext: textScn, sceneView: self.scnView, scale: 1/100.0)
-        self.scnView.scene.rootNode.addChildNode(textNode)
+        sunNode.addChildNode(textNode)
     }
     
     func createCamera(){
