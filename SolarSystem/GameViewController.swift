@@ -22,13 +22,7 @@ class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate 
         self.view.addSubview(scnView)
         
         scnView.translatesAutoresizingMaskIntoConstraints = false
-        
-        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat:
-            "V:|[scnView]|", options: NSLayoutFormatOptions(rawValue: 0),
-                             metrics: nil, views: ["scnView": scnView]))
-        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat:
-            "H:|[scnView]|", options: NSLayoutFormatOptions(rawValue: 0),
-                             metrics: nil, views: ["scnView": scnView]))
+        scnView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
         
         scnView.scene = scene
         scnView.showsStatistics = true
