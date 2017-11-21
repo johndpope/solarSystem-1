@@ -11,16 +11,8 @@ import SceneKit
 // for tvOS siri remote access
 
 
-let kGlobeRadius = 10.0
-let kCameraAltitude = 80.0
-let kDefaultCameraFov = 20.0
-let kMinFov = 5.0
-let kMaxFov = 30.0
-let kGlowPointAltitude = kGlobeRadius * 1.001
-let kGlowPointWidth = CGFloat(0.5)
-let kMinLatLonPerUnity = -0.1
-let kMaxLatLonPerUnity = 1.1
 
+let kGlowPointWidth = CGFloat(0.5)
 let kTiltOfEarthsAxisInDegrees = 23.5
 let kTiltOfEarthsAxisInRadians = (23.5 * Double.pi) / 180.0
 
@@ -58,25 +50,41 @@ class GlobeGlowPoint {
         self.node.geometry!.firstMaterial!.emission.intensity = 0.7
         self.node.castsShadow = false
         
+        fixScaleAccordingToRadiusOfNodeAttachedTo()
+    }
+    
+    func fixScaleAccordingToRadiusOfNodeAttachedTo(_ kGlobeRadius:Double = 10.0){
+        
+        
+//        let kCameraAltitude = 80.0
+//        let kDefaultCameraFov = 20.0
+//        let kMinFov = 5.0
+//        let kMaxFov = 30.0
+
+//        let kMinLatLonPerUnity = -0.1
+//        let kMaxLatLonPerUnity = 1.1
+//
+         let kGlowPointAltitude = kGlobeRadius * 1.001
+        
         // NB: our textures *center* on 0,0, so adjust by 90 degrees
-        let adjustedLon = lon + 90
+        let adjustedLon = self.longitude + 90
         
         // convert lat & lon to xyz
         // Note scenekit coordinate space:
         //      Camera looks  down the Z axis (down from +z)
         //      Right is +x, left is -x
         //      Up is +y, down is -y
-        let cosLat = cos(lat * Double.pi / 180.0)
-        let sinLat = sin(lat * Double.pi / 180.0);
+        let cosLat = cos(self.latitude * Double.pi / 180.0)
+        let sinLat = sin(self.latitude * Double.pi / 180.0);
         let cosLon = cos(adjustedLon * Double.pi / 180.0);
         let sinLon = sin(adjustedLon * Double.pi / 180.0);
         let x = kGlowPointAltitude * cosLat * cosLon;
         let y = kGlowPointAltitude * cosLat * sinLon;
         let z = kGlowPointAltitude * sinLat;
         //
-        let sceneKitX = -x / 10
-        let sceneKitY = z / 10
-        let sceneKitZ = y / 10
+        let sceneKitX = -x
+        let sceneKitY = z
+        let sceneKitZ = y
         
         //print("convered lat: \(lat) lon: \(lon) to \(sceneKitX),\(sceneKitY),\(sceneKitZ)")
         
@@ -87,15 +95,21 @@ class GlobeGlowPoint {
         
         // and compute the normal pitch, yaw & roll (facing away from the globe)
         //1. Pitch (the x component) is the rotation about the node's x-axis (in radians)
-        let pitch = -lat * Double.pi / 180.0
+        let pitch = -self.latitude * Double.pi / 180.0
         //2. Yaw   (the y component) is the rotation about the node's y-axis (in radians)
-        let yaw = lon * Double.pi / 180.0
+        let yaw = self.longitude * Double.pi / 180.0
         //3. Roll  (the z component) is the rotation about the node's z-axis (in radians)
         let roll = 0.0
         
         
         self.node.eulerAngles = SCNVector3(x: Float(pitch), y: Float(yaw), z: Float(roll) )
-        
     }
+    
+//    func fixDimesions(){
+//        if let parent = self.node.parent{
+//            parent.geometry?.heigh
+//        }
+//    }
+    
     
 }

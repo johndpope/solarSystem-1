@@ -126,20 +126,31 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     func addMyLocation(){
         
-        let stamford = GlobeGlowPoint(lat: 41.0594346, lon: -73.5107157)
-        myLocationNodeOnEarthNode = stamford.node
-        earth?.addChildNode(myLocationNodeOnEarthNode)
-        
-        let distanceConstraint = SCNDistanceConstraint(target: earth!)
-        distanceConstraint.maximumDistance = 10.0
-        distanceConstraint.minimumDistance = 9.5
-        let lookAtEarthConstraint = SCNLookAtConstraint(target: earth!)
-        lookAtEarthConstraint.isGimbalLockEnabled = true
-        sceneView.pointOfView?.constraints = [ lookAtEarthConstraint ]
+        if let earth = earth{
+            let stamford = GlobeGlowPoint(lat: 41.0594346, lon: -73.5107157)
+            myLocationNodeOnEarthNode = stamford.node
+            earth.addChildNode(myLocationNodeOnEarthNode)
+            
+            // visually stop the earth spinning by making the point of view focus on this
+            let focusNode = SCNNode()
+            focusNode.position = SCNVector3Make(0, 0, -0.02)
+            earth.addChildNode(focusNode)
+            
+            // the stamford dot is way above the skies.
+            let line = cylinderLineBetweenNodeA(nodeA:myLocationNodeOnEarthNode,nodeB:earth)
+            earth.addChildNode(line)
+            
+            // POV MAGIC - constrain the point of view to focus on the planet earth focusNode.
+            let distanceConstraint = SCNDistanceConstraint(target: earth)
+            distanceConstraint.maximumDistance = 0.3
+            distanceConstraint.minimumDistance = 0.1
+            let lookAtEarthConstraint = SCNLookAtConstraint(target: focusNode)
+            
+//            lookAtEarthConstraint.isGimbalLockEnabled = true
+            sceneView.pointOfView?.constraints = [distanceConstraint, lookAtEarthConstraint ]
+        }
 
-//        let lookAtMyLocationConstraint = SCNLookAtConstraint(target: myLocationNodeOnEarthNode)
-//        lookAtMyLocationConstraint.isGimbalLockEnabled = true
-//        sceneView.pointOfView?.constraints = [ lookAtEarthConstraint,lookAtMyLocationConstraint ]
+
         
     }
     
