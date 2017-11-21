@@ -147,7 +147,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             let lookAtEarthConstraint = SCNLookAtConstraint(target: focusNode)
             
 //            lookAtEarthConstraint.isGimbalLockEnabled = true
-            sceneView.pointOfView?.constraints = [distanceConstraint, lookAtEarthConstraint ]
+//            sceneView.pointOfView?.constraints = [distanceConstraint, lookAtEarthConstraint ]
         }
 
 
@@ -170,6 +170,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // sceneView.showDebug()
         sceneView.delegate = self
         sceneView.scene = scene
+//        sceneView.scene.background.contents = UIColor.black
+        
+        sceneView.scene.background.contents = [
+            "art.scnassets/0mettle.png",
+            "art.scnassets/1mettle.png",
+            "art.scnassets/2mettle.png",
+            "art.scnassets/3mettle.png",
+            "art.scnassets/4mettle.png",
+            "art.scnassets/5mettle.png",
+        ]
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
