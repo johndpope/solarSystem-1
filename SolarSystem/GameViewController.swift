@@ -4,6 +4,7 @@ import UIKit
 import ARKit
 import SceneKit
 
+
 class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate {
     
     var scnView:ARSCNView!
@@ -18,10 +19,9 @@ class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        scnView = ARSCNView()
+        scnView = ARSCNView(frame:.zero)
         self.view.addSubview(scnView)
-        
-        scnView.translatesAutoresizingMaskIntoConstraints = false
+        scnView.frame = self.view.bounds
         scnView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
         
         scnView.scene = scene
