@@ -13,21 +13,24 @@ import CoreMotion
 import CoreLocation
 
 
-func -(_ l: SCNVector3, r: SCNVector3) -> SCNVector3{
-    return SCNVector3(l.x - r.x, l.y - r.y, l.z - r.z)
-}
-
-func +(_ l: SCNVector3, r: SCNVector3) -> SCNVector3{
-    return SCNVector3(l.x + r.x, l.y + r.y, l.z + r.z)
-}
-
-
 extension ViewController{
     
-    
+    static var runOnce = false
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-        recenterEarthToPositionOfCamera(renderer,scene)
-       
+        //recenterEarthToPositionOfCamera(renderer,scene)
+        
+//        if !ViewController.runOnce{
+//            //guard let pointOfView = renderer.pointOfView else { return }
+//            if let cc = camCoords.getCameraCoordinates(sceneView: sceneView){
+//                if cc.x == 0{
+//                    return;
+//                }
+//                ViewController.runOnce = true
+//                createEnvironment(cameraPosition:SCNVector3(cc.x, cc.y, cc.z))
+//                //node.position = SCNVector3(cc.x, cc.y, cc.z)
+//                //sceneView.scene.rootNode.addChildNode(node)
+//            }
+//        }
     }
     
     func focusOnEarth(){
@@ -52,6 +55,8 @@ extension ViewController{
     
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
         print(node)
+        
+      
     }
     
     func session(_ session: ARSession, didFailWithError error: Error) {
@@ -78,6 +83,7 @@ extension ViewController{
         let location = SCNVector3(transform.m41, transform.m42, transform.m43)
         let currentPositionOfCamera = orientation + location
 
+        
         
         DispatchQueue.main.async {
             if let earthPosition = self.earth?.position{

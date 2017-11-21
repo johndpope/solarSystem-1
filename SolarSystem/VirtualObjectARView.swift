@@ -19,7 +19,7 @@ extension float4x4 {
         return float3(translation.x, translation.y, translation.z)
     }
 }
-
+/*
 class VirtualObjectARView: ARSCNView {
 
     // MARK: - Types
@@ -237,16 +237,18 @@ extension SCNView {
         return float3(unprojectPoint(SCNVector3(point)))
     }
 }
+ */
+//
+//extension VirtualObjectARView.FeatureHitTestResult {
+//    /// Add a convenience initializer to `FeatureHitTestResult` for `HitTestRay`.
+//    /// By adding the initializer in an extension, we also get the default initializer for `FeatureHitTestResult`.
+//    init(featurePoint: float3, ray: VirtualObjectARView.HitTestRay) {
+//        self.featureHit = featurePoint
+//
+//        let originToFeature = featurePoint - ray.origin
+//        self.position = ray.origin + (ray.direction * simd_dot(ray.direction, originToFeature))
+//        self.distanceToRayOrigin = simd_length(self.position - ray.origin)
+//        self.featureDistanceToHitResult = simd_length(simd_cross(originToFeature, ray.direction))
+//    }
+//}
 
-extension VirtualObjectARView.FeatureHitTestResult {
-    /// Add a convenience initializer to `FeatureHitTestResult` for `HitTestRay`.
-    /// By adding the initializer in an extension, we also get the default initializer for `FeatureHitTestResult`.
-    init(featurePoint: float3, ray: VirtualObjectARView.HitTestRay) {
-        self.featureHit = featurePoint
-        
-        let originToFeature = featurePoint - ray.origin
-        self.position = ray.origin + (ray.direction * simd_dot(ray.direction, originToFeature))
-        self.distanceToRayOrigin = simd_length(self.position - ray.origin)
-        self.featureDistanceToHitResult = simd_length(simd_cross(originToFeature, ray.direction))
-    }
-}

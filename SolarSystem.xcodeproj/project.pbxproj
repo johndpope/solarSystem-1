@@ -10,6 +10,9 @@
 		2FFF1E871F19442E00768AB9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFF1E861F19442E00768AB9 /* AppDelegate.swift */; };
 		2FFF1E901F19442E00768AB9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FFF1E8F1F19442E00768AB9 /* Assets.xcassets */; };
 		2FFF1E931F19442E00768AB9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FFF1E911F19442E00768AB9 /* LaunchScreen.storyboard */; };
+		834699741FC3A1AB00162750 /* ARText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834699731FC3A1AB00162750 /* ARText.swift */; };
+		834699761FC3A23500162750 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834699751FC3A23500162750 /* Utilities.swift */; };
+		834699781FC3A3AE00162750 /* ViewController+Planets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834699771FC3A3AE00162750 /* ViewController+Planets.swift */; };
 		834C950B1FC13EB1005E15E6 /* GyroScene.scn in Resources */ = {isa = PBXBuildFile; fileRef = 834C950A1FC13EB1005E15E6 /* GyroScene.scn */; };
 		836E92391FC2467000D0B1FF /* VirtualObjectARView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836E92381FC2467000D0B1FF /* VirtualObjectARView.swift */; };
 		836E923B1FC248EC00D0B1FF /* ViewController+CoreMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836E923A1FC248EC00D0B1FF /* ViewController+CoreMotion.swift */; };
@@ -35,7 +38,6 @@
 		83D68ACA1FC23BEC00C5405C /* ViewController+CoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D68AC91FC23BEC00C5405C /* ViewController+CoreLocation.swift */; };
 		83F1776B1FC3243E000A12A1 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F1776A1FC3243E000A12A1 /* Camera.swift */; };
 		83F1776D1FC33DCE000A12A1 /* ViewController+Drawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F1776C1FC33DCD000A12A1 /* ViewController+Drawing.swift */; };
-		83F1776F1FC34062000A12A1 /* CylinderLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F1776E1FC34061000A12A1 /* CylinderLine.swift */; };
 		83F177711FC35C73000A12A1 /* SkyboxScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F177701FC35C73000A12A1 /* SkyboxScene.swift */; };
 /* End PBXBuildFile section */
 
@@ -46,6 +48,9 @@
 		2FFF1E8F1F19442E00768AB9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2FFF1E921F19442E00768AB9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2FFF1E941F19442E00768AB9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		834699731FC3A1AB00162750 /* ARText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARText.swift; sourceTree = "<group>"; };
+		834699751FC3A23500162750 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		834699771FC3A3AE00162750 /* ViewController+Planets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Planets.swift"; sourceTree = "<group>"; };
 		834C950A1FC13EB1005E15E6 /* GyroScene.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = GyroScene.scn; sourceTree = "<group>"; };
 		834C95121FC1EA70005E15E6 /* SceneKitDemo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneKitDemo.swift; sourceTree = "<group>"; };
 		836E92381FC2467000D0B1FF /* VirtualObjectARView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualObjectARView.swift; sourceTree = "<group>"; };
@@ -71,7 +76,6 @@
 		83D68AC91FC23BEC00C5405C /* ViewController+CoreLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+CoreLocation.swift"; sourceTree = "<group>"; };
 		83F1776A1FC3243E000A12A1 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		83F1776C1FC33DCD000A12A1 /* ViewController+Drawing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+Drawing.swift"; sourceTree = "<group>"; };
-		83F1776E1FC34061000A12A1 /* CylinderLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CylinderLine.swift; sourceTree = "<group>"; };
 		83F177701FC35C73000A12A1 /* SkyboxScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkyboxScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -105,27 +109,27 @@
 		2FFF1E851F19442E00768AB9 /* SolarSystem */ = {
 			isa = PBXGroup;
 			children = (
-				83F1776E1FC34061000A12A1 /* CylinderLine.swift */,
-				83D68AB51FC2132100C5405C /* SkyMapViewController.swift */,
-				834C95121FC1EA70005E15E6 /* SceneKitDemo.swift */,
-				83F1776A1FC3243E000A12A1 /* Camera.swift */,
-				83D68AC71FC238ED00C5405C /* SwiftGlobe.swift */,
-				83D68AC21FC238A000C5405C /* Resources */,
-				83D68ABE1FC228A700C5405C /* art.scnassets */,
-				83D68AAA1FC1EEC500C5405C /* Extras */,
 				2FFF1E861F19442E00768AB9 /* AppDelegate.swift */,
+				83D68ABE1FC228A700C5405C /* art.scnassets */,
 				2FFF1E8F1F19442E00768AB9 /* Assets.xcassets */,
+				83F1776A1FC3243E000A12A1 /* Camera.swift */,
+				83D68AAA1FC1EEC500C5405C /* Extras */,
+				83708A701FC35DEC00C0A9B3 /* GameViewController.swift */,
 				834C950A1FC13EB1005E15E6 /* GyroScene.scn */,
 				2FFF1E941F19442E00768AB9 /* Info.plist */,
 				2FFF1E911F19442E00768AB9 /* LaunchScreen.storyboard */,
+				83D68AC21FC238A000C5405C /* Resources */,
+				834C95121FC1EA70005E15E6 /* SceneKitDemo.swift */,
+				83D68AB51FC2132100C5405C /* SkyMapViewController.swift */,
+				83D68AC71FC238ED00C5405C /* SwiftGlobe.swift */,
 				2FFF1E8A1F19442E00768AB9 /* ViewController.swift */,
-				83D68AC91FC23BEC00C5405C /* ViewController+CoreLocation.swift */,
-				83F1776C1FC33DCD000A12A1 /* ViewController+Drawing.swift */,
-				836E923A1FC248EC00D0B1FF /* ViewController+CoreMotion.swift */,
-				83D68AA81FC1EE7000C5405C /* ViewController+Gestures.swift */,
 				83708A7C1FC3611F00C0A9B3 /* ViewController+ARSCNView.swift */,
+				83D68AC91FC23BEC00C5405C /* ViewController+CoreLocation.swift */,
+				836E923A1FC248EC00D0B1FF /* ViewController+CoreMotion.swift */,
+				83F1776C1FC33DCD000A12A1 /* ViewController+Drawing.swift */,
+				83D68AA81FC1EE7000C5405C /* ViewController+Gestures.swift */,
+				834699771FC3A3AE00162750 /* ViewController+Planets.swift */,
 				836E92381FC2467000D0B1FF /* VirtualObjectARView.swift */,
-				83708A701FC35DEC00C0A9B3 /* GameViewController.swift */,
 			);
 			path = SolarSystem;
 			sourceTree = "<group>";
@@ -133,6 +137,8 @@
 		83D68AAA1FC1EEC500C5405C /* Extras */ = {
 			isa = PBXGroup;
 			children = (
+				834699751FC3A23500162750 /* Utilities.swift */,
+				834699731FC3A1AB00162750 /* ARText.swift */,
 				83F177701FC35C73000A12A1 /* SkyboxScene.swift */,
 				83D68AB71FC2270B00C5405C /* MyCameraCoordinates.swift */,
 				83D68AB11FC1EEDD00C5405C /* BaseNode.swift */,
@@ -244,6 +250,7 @@
 				83708A711FC35DEC00C0A9B3 /* GameViewController.swift in Sources */,
 				83D68AB81FC2270B00C5405C /* MyCameraCoordinates.swift in Sources */,
 				83F1776D1FC33DCE000A12A1 /* ViewController+Drawing.swift in Sources */,
+				834699781FC3A3AE00162750 /* ViewController+Planets.swift in Sources */,
 				83D68AAE1FC1EEC500C5405C /* ARGesture.swift in Sources */,
 				83D68ACA1FC23BEC00C5405C /* ViewController+CoreLocation.swift in Sources */,
 				83D68AB01FC1EEC500C5405C /* Extensions.swift in Sources */,
@@ -254,7 +261,8 @@
 				83F1776B1FC3243E000A12A1 /* Camera.swift in Sources */,
 				83F177711FC35C73000A12A1 /* SkyboxScene.swift in Sources */,
 				83D68AB21FC1EEDD00C5405C /* BaseNode.swift in Sources */,
-				83F1776F1FC34062000A12A1 /* CylinderLine.swift in Sources */,
+				834699761FC3A23500162750 /* Utilities.swift in Sources */,
+				834699741FC3A1AB00162750 /* ARText.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,7 +391,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = KL43C67G5Z;
+				DEVELOPMENT_TEAM = WMDZ2CQA8K;
 				INFOPLIST_FILE = SolarSystem/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Octopus.SolarSystem3;
@@ -397,7 +405,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = KL43C67G5Z;
+				DEVELOPMENT_TEAM = WMDZ2CQA8K;
 				INFOPLIST_FILE = SolarSystem/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Octopus.SolarSystem3;

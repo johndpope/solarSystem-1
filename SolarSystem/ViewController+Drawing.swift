@@ -54,7 +54,7 @@ extension ViewController{
     
     
     func constrainCameraToPlanetNode(_ node:SCNNode){
-        cameraHandle.constraints = [ SCNLookAtConstraint(target: node) ]
+        cameraNode.constraints = [ SCNLookAtConstraint(target: node) ]
     }
     
     func addNorthSouthPoles(node:SCNNode){

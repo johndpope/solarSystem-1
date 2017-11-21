@@ -18,7 +18,23 @@ class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       
+        scnView = ARSCNView()
+        self.view.addSubview(scnView)
+        
+        scnView.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat:
+            "V:|[scnView]|", options: NSLayoutFormatOptions(rawValue: 0),
+                             metrics: nil, views: ["scnView": scnView]))
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat:
+            "H:|[scnView]|", options: NSLayoutFormatOptions(rawValue: 0),
+                             metrics: nil, views: ["scnView": scnView]))
+        
+        scnView.scene = scene
+        scnView.showsStatistics = true
+        scnView.backgroundColor = UIColor.black
+        scnView.delegate = self
+        
         
         let lightNode = SCNNode()
         lightNode.light = SCNLight()
@@ -131,22 +147,13 @@ class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate 
             )
         )
         
-        scnView = ARSCNView()
-        self.view.addSubview(scnView)
+        let textScn = ARText(text: "moon", font: UIFont.systemFont(ofSize: 10), color:.red, depth: 40)
         
-        scnView.translatesAutoresizingMaskIntoConstraints = false
+        let textNode = TextNode(distance: 1, scntext: textScn, sceneView: scnView, scale: 1/100.0)
+        moonNode.addChildNode(textNode)
         
-        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat:
-            "V:|[scnView]|", options: NSLayoutFormatOptions(rawValue: 0),
-                             metrics: nil, views: ["scnView": scnView]))
-        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat:
-            "H:|[scnView]|", options: NSLayoutFormatOptions(rawValue: 0),
-                             metrics: nil, views: ["scnView": scnView]))
         
-        scnView.scene = scene
-        scnView.showsStatistics = true
-        scnView.backgroundColor = UIColor.black
-        scnView.delegate = self
+
         createCamera()
         
     }
@@ -166,14 +173,14 @@ class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate 
     }
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-       recenterEarthToPositionOfCamera(renderer,scene)
+       //recenterEarthToPositionOfCamera(renderer,scene)
     }
     
     
     func createCamera(){
-        cameraNode.position = SCNVector3Make(0, 0, -2)
+        cameraNode.position = SCNVector3Make(0, 0, 30)
         cameraNode.camera = camera
-        camera.usesOrthographicProjection = true
+//        camera.usesOrthographicProjection = true
         cameraNode.camera?.zFar = 800 // ???
         cameraNode.camera?.fieldOfView = 55 // ???
         print("👀 - creating cameraNode constraint to earthNode ")
@@ -217,7 +224,7 @@ class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate 
     
     
     func updateState(for frame: ARFrame, trackingState: ARCamera.TrackingState) {
-        switch trackingState {
+     /*   switch trackingState {
         case .normal
             where frame.anchors.isEmpty:
             state = .normalEmptyAnchors
@@ -231,7 +238,7 @@ class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate 
             state = .limitedInsufficientFeatures
         case .limited(.initializing):
             state = .limitedInitializing
-        }
+        }*/
     }
     
     public func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
