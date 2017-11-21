@@ -6,12 +6,14 @@ import SceneKit
 
 
 class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate {
+ 
     
     var scnView:ARSCNView!
     let scene = SCNScene()
     let earthRotationNode = SCNNode()
     let earthNode = SCNNode()
     let sunNode = SCNNode()
+    let sun = SCNSphere(radius: 2.5)
     
     // Camera
     var camera = SCNCamera()
@@ -48,7 +50,7 @@ class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate 
         scene.rootNode.addChildNode(baseNode)
         
       
-        let sun = SCNSphere(radius: 2.5)
+        // sun
         sun.firstMaterial?.diffuse.contents = UIImage(named:"sun.jpg")
         sunNode.geometry = sun
         sunNode.position = SCNVector3(0, 0, 0);
@@ -143,9 +145,11 @@ class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate 
         )
         createCamera()
 //        createGeoCentricWorld(earthNode)
-        addArText()
-        
+//        addArText()
+        self.setupGesture()
     }
+    
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -162,13 +166,14 @@ class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate 
     }
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-       //recenterEarthToPositionOfCamera(renderer,scene)
+//       recenterEarthToCameraCoordinates(renderer)
     }
     
     func addArText(){
-        let textScn = ARText(text: "sun", font: UIFont.systemFont(ofSize: 25), color: UIColor .white, depth: 5)
-        let textNode = TextNode(distance: 1, scntext: textScn, sceneView: self.scnView, scale: 1/100.0)
-        sunNode.addChildNode(textNode)
+        let textScn = ARText(text: "earth", font: UIFont.systemFont(ofSize:7), color: UIColor .white, depth: 6)
+        let textNode = TextNode(distance: 1, scntext: textScn, sceneView: self.scnView, scale: 1/100)
+        earthNode.addChildNode(textNode)
+       
     }
     
     func createCamera(){
@@ -207,26 +212,28 @@ class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate 
         let currentTransform = frame.camera.transform
         print("currentTransform:", currentTransform)
     }
-    
-    func recenterEarthToPositionOfCamera(_ renderer:SCNSceneRenderer, _ scene: SCNScene){
-        // The node provides the position and direction of a virtual camera, and the camera object provides rendering parameters such as field of view and focus.
-        guard let pointOfView = renderer.pointOfView else { return }
+   
+    func recenterEarthToCameraCoordinates(_ renderer:SCNSceneRenderer){
+//         guard let pointOfView = renderer.pointOfView else { return }
+        if let cc = MyCameraCoordinates.getCameraCoordinates(sceneView: scnView){
+            cameraNode.position = SCNVector3(cc.x, cc.y, cc.z - 20)
+//            cameraNode.transform = pointOfView.transform
+        }
+       /* // The node provides the position and direction of a virtual camera, and the camera object provides rendering parameters such as field of view and focus.
+       
         let transform = pointOfView.transform
         let orientation = SCNVector3(-transform.m31, -transform.m32, -transform.m33)
         let location = SCNVector3(transform.m41, transform.m42, transform.m43)
         let currentPositionOfCamera = orientation + location
-//        cameraNode.position = currentPositionOfCamera
+        pointOfView.position
+//        cameraNode.position = currentPositionOfCamera*/
 
-        
-       /* DispatchQueue.main.async {
-             let earthPosition = self.earthNode.position
-             let earthRotation =  self.earthNode.rotation
-             let earthOffset = earthPosition - currentPositionOfCamera
-            .position = earthOffset
-            self.scnView.pointOfView?.rotation = earthRotation
-            
-        }*/
+
     }
+    
+  
+    
+    
     
     func session(_ session: ARSession, didFailWithError error: Error) {}
     func sessionWasInterrupted(_ session: ARSession) {}
@@ -264,5 +271,49 @@ class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate 
     public func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
         guard let frame = session.currentFrame else { return }
         updateState(for: frame, trackingState: camera.trackingState)
+    }
+}
+extension GameViewController {
+    func setupGesture()  {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(GameViewController.handleTap(gestureRecognize:)))
+        view.addGestureRecognizer(tapGesture)
+    }
+    @objc
+    func handleTap(gestureRecognize : UITapGestureRecognizer)  {
+     
+        guard let currentFrame = self.scnView.session.currentFrame else { return  }
+
+        // INSERT I DON'T KNOW WHAT I'M DOING DOG PICTURE
+        // Create a transform with a translation of 0.2 meters in front of the camera
+        var translation = matrix_identity_float4x4
+        translation.columns.3.z = -0.2
+        let transform = simd_mul(currentFrame.camera.transform, translation)
+        
+        // Add a new anchor to the session
+        let anchor = ARAnchor(transform: transform)
+        scnView.session.add(anchor: anchor)
+    }
+}
+extension ViewController: ARSKViewDelegate{
+    
+    func view(_ view: ARSKView, nodeFor anchor: ARAnchor) -> SKNode?{
+        
+        return SKLabelNode(text: "👾")
+    }
+    func view(_ view: ARSKView, didAdd node: SKNode, for anchor: ARAnchor)
+    {
+        
+    }
+    func view(_ view: ARSKView, willUpdate node: SKNode, for anchor: ARAnchor)
+    {
+        
+    }
+    func view(_ view: ARSKView, didUpdate node: SKNode, for anchor: ARAnchor)
+    {
+        
+    }
+    func view(_ view: ARSKView, didRemove node: SKNode, for anchor: ARAnchor)
+    {
+        
     }
 }

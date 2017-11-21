@@ -38,7 +38,7 @@ extension ViewController{
     }
     
     func addNodeAtCameraPosition(node:SCNNode){
-        if let cc = camCoords.getCameraCoordinates(sceneView: sceneView){
+        if let cc = MyCameraCoordinates.getCameraCoordinates(sceneView: sceneView){
             node.position = SCNVector3(cc.x, cc.y, cc.z)
             sceneView.scene.rootNode.addChildNode(node)
         }

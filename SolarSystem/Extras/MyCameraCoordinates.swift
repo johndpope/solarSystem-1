@@ -16,7 +16,7 @@ struct MyCameraCoordinates {
     var y = Float()
     var z = Float()
     
-    func getCameraCoordinates(sceneView: ARSCNView) -> MyCameraCoordinates? {
+    static func getCameraCoordinates(sceneView: ARSCNView) -> MyCameraCoordinates? {
         if let cameraTransform = sceneView.session.currentFrame?.camera.transform{
               let cameraCoordinates = MDLTransform(matrix: cameraTransform)
             var cc = MyCameraCoordinates()
