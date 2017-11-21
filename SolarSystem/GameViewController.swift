@@ -140,15 +140,9 @@ class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate 
                                    duration: 1.5)
             )
         )
-        
-        let textScn = ARText(text: "moon", font: UIFont.systemFont(ofSize: 10), color:.red, depth: 40)
-        
-        let textNode = TextNode(distance: 1, scntext: textScn, sceneView: scnView, scale: 1/100.0)
-        moonNode.addChildNode(textNode)
-        
-        
-
         createCamera()
+//        createGeoCentricWorld(earthNode)
+        addArText()
         
     }
     
@@ -170,6 +164,11 @@ class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate 
        //recenterEarthToPositionOfCamera(renderer,scene)
     }
     
+    func addArText(){
+        let textScn = ARText(text: "text", font: UIFont.systemFont(ofSize: 25), color: UIColor .white, depth: 5)
+        let textNode = TextNode(distance: 1, scntext: textScn, sceneView: self.scnView, scale: 1/100.0)
+        self.scnView.scene.rootNode.addChildNode(textNode)
+    }
     
     func createCamera(){
         cameraNode.position = SCNVector3Make(0, 0, 30)
@@ -185,6 +184,22 @@ class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate 
        self.scnView.pointOfView = cameraNode
         
     }
+    
+    /*
+    func createGeoCentricWorld(_ node:SCNNode){
+        guard let pointOfView = self.scnView.pointOfView else { return }
+        
+        let mat = pointOfView.transform
+        let dir = SCNVector3(-1 * mat.m31, -1 * mat.m32, -1 * mat.m33)
+        let distance:Float = 1
+        let currentPosition = pointOfView.position + (dir * distance)
+        
+        
+//        node.position = currentPosition
+        node.simdRotation = pointOfView.simdRotation
+        node.setPivot()
+//        self.scale = SCNVector3(scale, scale, scale)
+    }*/
     
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         // Do something with the new transform
