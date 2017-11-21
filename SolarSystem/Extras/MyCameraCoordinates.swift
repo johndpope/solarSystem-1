@@ -26,7 +26,12 @@ struct MyCameraCoordinates {
               return cc
         }
         return nil
-        
-      
     }
+    
+    func friendlyString() -> String {
+        return "(\(String(format: "%.2f", x)), \(String(format: "%.2f", y)), \(String(format: "%.2f", z)))"
+    }
+    
+    
+    
 }

@@ -8,12 +8,16 @@ import SceneKit
 class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate {
  
     
-    var scnView:ARSCNView!
+    var sceneView:ARSCNView!
     let scene = SCNScene()
     let earthRotationNode = SCNNode()
     let earthNode = SCNNode()
+    let earthGroupNode = SCNNode()
     let sunNode = SCNNode()
     let sun = SCNSphere(radius: 2.5)
+    
+    var myLocationNodeOnEarthNode = SCNNode()
+    
     
     // Camera
     var camera = SCNCamera()
@@ -22,15 +26,15 @@ class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        scnView = ARSCNView(frame:.zero)
-        self.view.addSubview(scnView)
-        scnView.frame = self.view.bounds
-        scnView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
+        sceneView = ARSCNView(frame:.zero)
+        self.view.addSubview(sceneView)
+        sceneView.frame = self.view.bounds
+        sceneView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
         
-        scnView.scene = scene
-        scnView.showsStatistics = true
-        scnView.backgroundColor = UIColor.black
-        scnView.delegate = self
+        sceneView.scene = scene
+        sceneView.showsStatistics = true
+        sceneView.backgroundColor = UIColor.black
+        sceneView.delegate = self
         
         
         let lightNode = SCNNode()
@@ -82,7 +86,6 @@ class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate 
         
         sunNode.addChildNode(earthRotationNode)
         
-        let earthGroupNode = SCNNode()
         earthGroupNode.position = SCNVector3(15, 0, 0)
         earthRotationNode.addChildNode(earthGroupNode)
         
@@ -143,10 +146,11 @@ class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate 
                                    duration: 1.5)
             )
         )
-        createCamera()
-//        createGeoCentricWorld(earthNode)
-//        addArText()
-        self.setupGesture()
+        
+//        attachCameraToTarget(self.myLocationNodeOnEarthNode)
+        addMyLocation()
+
+        setupGesture()
     }
     
 
@@ -155,57 +159,63 @@ class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate 
         super.viewWillAppear(animated)
         
         let configuration = ARWorldTrackingConfiguration()
+        sceneView.session.run(configuration)
         
-        scnView.session.run(configuration)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        scnView.session.pause()
+        sceneView.session.pause()
     }
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-//       recenterEarthToCameraCoordinates(renderer)
+
+        if let cc = MyCameraCoordinates.getCameraCoordinates(sceneView: sceneView){
+//           print("actual iphone camera position:",cc.friendlyString())
+
+//            sceneView.pointOfView?.worldPosition = cameraNode.worldPosition
+//            sceneView.pointOfView?.transform = cameraNode.transform
+
+        }
+
     }
     
-    func addArText(){
-        let textScn = ARText(text: "earth", font: UIFont.systemFont(ofSize:7), color: UIColor .white, depth: 6)
-        let textNode = TextNode(distance: 1, scntext: textScn, sceneView: self.scnView, scale: 1/100)
-        earthNode.addChildNode(textNode)
-       
-    }
+
     
-    func createCamera(){
+    
+    func attachCameraToTarget(_ targetNode:SCNNode){
         cameraNode.position = SCNVector3Make(0, 0, 30)
         cameraNode.camera = camera
-//        camera.usesOrthographicProjection = true
         cameraNode.camera?.zFar = 800 // ???
         cameraNode.camera?.fieldOfView = 55 // ???
-        print("👀 - creating cameraNode constraint to earthNode ")
-        cameraNode.constraints = [ SCNLookAtConstraint(target: earthNode) ]
-        print("👀 - attaching cameraNode to earth ")
-        self.earthNode.addChildNode(cameraNode)
-        print("👀 - making the point of view the camera ")
-       self.scnView.pointOfView = cameraNode
+        print("👀 - attaching cameraNode to target node ")
+        targetNode.addChildNode(cameraNode)
         
     }
     
-    /*
-    func createGeoCentricWorld(_ node:SCNNode){
-        guard let pointOfView = self.scnView.pointOfView else { return }
+    func addConstraintsToFakeCameraToFocusOnUserLocation(){
+
+    }
+    
+    func addMyLocation(){
         
-        let mat = pointOfView.transform
-        let dir = SCNVector3(-1 * mat.m31, -1 * mat.m32, -1 * mat.m33)
-        let distance:Float = 1
-        let currentPosition = pointOfView.position + (dir * distance)
+        let stamford = GlobeGlowPoint(lat: 41.0594346, lon: -73.5107157)
+        myLocationNodeOnEarthNode = stamford.node
+        earthGroupNode.addChildNode(myLocationNodeOnEarthNode)
         
+        let distanceConstraint = SCNDistanceConstraint(target: earthGroupNode)
+        distanceConstraint.maximumDistance = 10.0
+        distanceConstraint.minimumDistance = 9.5
+        let lookAtEarthConstraint = SCNLookAtConstraint(target: earthGroupNode)
+        lookAtEarthConstraint.isGimbalLockEnabled = true
+        let lookAtMyLocationConstraint = SCNLookAtConstraint(target: myLocationNodeOnEarthNode)
+        lookAtMyLocationConstraint.isGimbalLockEnabled = true
+        sceneView.pointOfView?.constraints = [ lookAtEarthConstraint,lookAtMyLocationConstraint ]
         
-//        node.position = currentPosition
-        node.simdRotation = pointOfView.simdRotation
-        node.setPivot()
-//        self.scale = SCNVector3(scale, scale, scale)
-    }*/
+    }
+    
+
     
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         // Do something with the new transform
@@ -215,7 +225,7 @@ class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate 
    
     func recenterEarthToCameraCoordinates(_ renderer:SCNSceneRenderer){
 //         guard let pointOfView = renderer.pointOfView else { return }
-        if let cc = MyCameraCoordinates.getCameraCoordinates(sceneView: scnView){
+        if let cc = MyCameraCoordinates.getCameraCoordinates(sceneView: sceneView){
             cameraNode.position = SCNVector3(cc.x, cc.y, cc.z - 20)
 //            cameraNode.transform = pointOfView.transform
         }
@@ -272,6 +282,27 @@ class GameViewController: UIViewController, ARSCNViewDelegate,ARSessionDelegate 
         guard let frame = session.currentFrame else { return }
         updateState(for: frame, trackingState: camera.trackingState)
     }
+    
+    
+    func addNorthSouthPoles(node:SCNNode){
+        let northPole = GlobeGlowPoint(lat: 90,lon: 0)
+        let southPole = GlobeGlowPoint(lat: -90,lon: 0)
+        let line = cylinderLineBetweenNodeA(nodeA:northPole.node,nodeB:southPole.node)
+        
+        node.addChildNode(line)
+    }
+    
+    func cylinderLineBetweenNodeA(nodeA: SCNNode, nodeB: SCNNode) -> SCNNode {
+        
+        return CylinderLine(parent: sceneView.scene.rootNode,
+                            v1: nodeA.position,
+                            v2: nodeB.position,
+                            radius: 0.001,
+                            radSegmentCount: 16,
+                            color: UIColor.red)
+        
+    }
+    
 }
 extension GameViewController {
     func setupGesture()  {
@@ -281,7 +312,7 @@ extension GameViewController {
     @objc
     func handleTap(gestureRecognize : UITapGestureRecognizer)  {
      
-        guard let currentFrame = self.scnView.session.currentFrame else { return  }
+        guard let currentFrame = self.sceneView.session.currentFrame else { return  }
 
         // INSERT I DON'T KNOW WHAT I'M DOING DOG PICTURE
         // Create a transform with a translation of 0.2 meters in front of the camera
@@ -291,7 +322,7 @@ extension GameViewController {
         
         // Add a new anchor to the session
         let anchor = ARAnchor(transform: transform)
-        scnView.session.add(anchor: anchor)
+        sceneView.session.add(anchor: anchor)
     }
 }
 extension ViewController: ARSKViewDelegate{

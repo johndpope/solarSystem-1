@@ -34,7 +34,7 @@ extension ViewController{
         sunSphere.firstMaterial?.diffuse.contents = UIImage(named:"art.scnassets/sunTexture.jpg")
         sunNode.addAnimation(spinAnimation(duration: 40), forKey: "spin")
         sunNode.position = SCNVector3Make(0, 0, -2)
-        addNorthSouthPoles(node:sunNode)
+//        addNorthSouthPoles(node:sunNode)
         scene.rootNode.addChildNode(sunNode)
         
         
@@ -91,13 +91,14 @@ extension ViewController{
                 
                 earth = node
                 scene.rootNode.addChildNode(node)
-                //                constrainCameraToPlanetNode(node)
                 
             }else{
                 scene.rootNode.addChildNode(node)
             }
             
-            addNorthSouthPoles(node:node)
+//            addNorthSouthPoles(node:node)
         }
     }
+    
+
 }

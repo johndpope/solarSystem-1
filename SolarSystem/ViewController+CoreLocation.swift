@@ -41,12 +41,12 @@ extension ViewController:CLLocationManagerDelegate{
             print( "Lat: " + coordinateFormatter.string(from: location.coordinate.latitude as NSNumber)! + ", Lon: " + coordinateFormatter.string(from: location.coordinate.longitude as NSNumber)!)
             
             // x: 0.0, y: 0.0, z: 5.05
-            let zz = GlobeGlowPoint(lat: location.coordinate.latitude,lon: location.coordinate.longitude)
+//            let zz = GlobeGlowPoint(lat: location.coordinate.latitude,lon: location.coordinate.longitude)
             // make this one white!
-            zz.node.geometry!.firstMaterial!.diffuse.contents = "whiteGlow-32x32.png"
-            earth?.addChildNode(zz.node)
+//            zz.node.geometry!.firstMaterial!.diffuse.contents = "whiteGlow-32x32.png"
+//            earth?.addChildNode(zz.node)
 //            constrainCameraToPlanetNode(zz.node) -- attempt to lock on current location
-            myLocationNode = zz
+//            myLocationNode = zz
         }
         
     }

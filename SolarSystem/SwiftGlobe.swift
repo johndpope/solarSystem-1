@@ -74,15 +74,16 @@ class GlobeGlowPoint {
         let y = kGlowPointAltitude * cosLat * sinLon;
         let z = kGlowPointAltitude * sinLat;
         //
-        let sceneKitX = -x
-        let sceneKitY = z
-        let sceneKitZ = y
+        let sceneKitX = -x / 10
+        let sceneKitY = z / 10
+        let sceneKitZ = y / 10
         
         //print("convered lat: \(lat) lon: \(lon) to \(sceneKitX),\(sceneKitY),\(sceneKitZ)")
         
         let pos = SCNVector3(x: Float(sceneKitX), y: Float(sceneKitY), z: Float(sceneKitZ) )
         self.node.position = pos
         
+        print("user location on node: ",pos.friendlyString())
         
         // and compute the normal pitch, yaw & roll (facing away from the globe)
         //1. Pitch (the x component) is the rotation about the node's x-axis (in radians)

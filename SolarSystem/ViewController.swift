@@ -21,6 +21,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     let moMan = CMMotionManager()
     var sunNode = SCNNode()
     var earth:SCNNode?
+    var myLocationNodeOnEarthNode = SCNNode()
     
 
     // Camera manipulation
@@ -31,9 +32,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     var currentGesture: ARGesture? // not used
     
-    var myLocationNode:GlobeGlowPoint?
-  
-    
+
     
 
     // Intention here I believe is to be able to provide more degrees of freedom with tilt for the camera within universe eg. to provide street level view
@@ -110,8 +109,39 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         addAmbientLighting()
 //        addHorizon()
         addPlanetsToRootNode()
+        attachCameraToTarget(self.earth!)
+        addMyLocation()
     }
     
+    func attachCameraToTarget(_ targetNode:SCNNode){
+        cameraNode.position = SCNVector3Make(0, 0, 30)
+        cameraNode.camera = camera
+        cameraNode.camera?.zFar = 800 // ???
+        cameraNode.camera?.fieldOfView = 55 // ???
+        print("👀 - attaching cameraNode to target node ")
+        targetNode.addChildNode(cameraNode)
+        
+    }
+    
+    
+    func addMyLocation(){
+        
+        let stamford = GlobeGlowPoint(lat: 41.0594346, lon: -73.5107157)
+        myLocationNodeOnEarthNode = stamford.node
+        earth?.addChildNode(myLocationNodeOnEarthNode)
+        
+        let distanceConstraint = SCNDistanceConstraint(target: earth!)
+        distanceConstraint.maximumDistance = 10.0
+        distanceConstraint.minimumDistance = 9.5
+        let lookAtEarthConstraint = SCNLookAtConstraint(target: earth!)
+        lookAtEarthConstraint.isGimbalLockEnabled = true
+        sceneView.pointOfView?.constraints = [ lookAtEarthConstraint ]
+
+//        let lookAtMyLocationConstraint = SCNLookAtConstraint(target: myLocationNodeOnEarthNode)
+//        lookAtMyLocationConstraint.isGimbalLockEnabled = true
+//        sceneView.pointOfView?.constraints = [ lookAtEarthConstraint,lookAtMyLocationConstraint ]
+        
+    }
     
     
     func enableLocationManager(){
