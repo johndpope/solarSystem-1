@@ -17,39 +17,23 @@ extension ViewController{
     
     static var runOnce = false
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-        //recenterEarthToPositionOfCamera(renderer,scene)
+
+        if let cc = MyCameraCoordinates.getCameraCoordinates(sceneView: sceneView){
+                print("actual iphone camera position:",cc.friendlyString())
+            print("camera node position:",cameraNode.worldPosition.friendlyString())
+            
+            
+        }
+
         
-//        if !ViewController.runOnce{
-//            //guard let pointOfView = renderer.pointOfView else { return }
-//            if let cc = camCoords.getCameraCoordinates(sceneView: sceneView){
-//                if cc.x == 0{
-//                    return;
-//                }
-//                ViewController.runOnce = true
-//                createEnvironment(cameraPosition:SCNVector3(cc.x, cc.y, cc.z))
-//                //node.position = SCNVector3(cc.x, cc.y, cc.z)
-//                //sceneView.scene.rootNode.addChildNode(node)
-//            }
-//        }
+
     }
     
     func focusOnEarth(){
+
         
-        /* if (cameraNode != sceneView.pointOfView){
-         print("👀 - making cameraNode the sceneView.pointOfView ")
-         sceneView.pointOfView = cameraNode
-         }*/
-        
-        // zoom to user's location
-        
-        sceneView.pointOfView?.position = cameraHandle.position
-        //            sceneView.pointOfView?.rotation = cameraHandle.rotation
-        
-        //        sceneView.pointOfView?.position = zoomedOutEarthCameraPosition!
-        /*sceneView.pointOfView?.position = cameraHandle.presentation.position
-         sceneView.pointOfView?.rotation = cameraHandle.presentation.rotation
-         sceneView.pointOfView?.orientation = cameraHandle.presentation.orientation*/
-        //        }
+        sceneView.pointOfView?.position = cameraHandle.position 
+   
         
     }
     

@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SolarSystem/ViewController.swift"
-            timestampString = "532988454.66423"
+            timestampString = "533058144.227656"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185">
+            startingLineNumber = "220"
+            endingLineNumber = "220">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -24,11 +24,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SolarSystem/ViewController.swift"
-            timestampString = "532988454.664569"
+            timestampString = "533058144.227726"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185">
+            startingLineNumber = "220"
+            endingLineNumber = "220">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -54,11 +54,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SolarSystem/ViewController.swift"
-            timestampString = "532988454.664856"
+            timestampString = "533058144.227801"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185">
+            startingLineNumber = "220"
+            endingLineNumber = "220">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -68,11 +68,27 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SolarSystem/ViewController.swift"
-            timestampString = "532988454.665089"
+            timestampString = "533058144.22785"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185">
+            startingLineNumber = "220"
+            endingLineNumber = "220">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SolarSystem/ViewController+ARSCNView.swift"
+            timestampString = "533058144.2279"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "23"
+            endingLineNumber = "23"
+            landmarkName = "renderer(_:updateAtTime:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -25,17 +25,57 @@ import CoreLocation
 ]
 
 extension ViewController{
+    /*
+    var sunRotation:CGFloat
+    let sunRotationSpeed:CGFloat
     
-    func addPlanetsToRootNode(){
+    var earthRotation:CGFloat
+    let earthRotationSpeed:CGFloat
+    
+    func doAnimation(){
+        
+        
+        sunRotation = rotateNodeLeft(sun, value: sunRotation, increase: sunRotationSpeed)
+        earthRotation = rotateNodeLeft(earth, value: earthRotation, increase: earthRotationSpeed)
+        
+        XCPCaptureValue("Sun rotation", sunRotation)
+        XCPCaptureValue("Earth rotation", earthRotation)
+        
+        SCNTransaction.begin()
+        SCNTransaction.setAnimationTimingFunction(CAMediaTimingFunction(name:kCAMediaTimingFunctionLinear))
+        SCNTransaction.setAnimationDuration(1)
+        SCNTransaction.setCompletionBlock{
+            self.doAnimation()
+        }
+        
+        sun.rotation = SCNVector4(x: 0.0, y: 1.0, z: 0.0, w: sunRotation)
+        earth.rotation = SCNVector4(x: 0.0, y: 1.0, z: 0.0, w: earthRotation)
+        
+        SCNTransaction.commit()
+    }*/
+    
+    func addPlanetsToRootNode(usesGeoCentric:Bool){
         
         // Sun
         let sunSphere = SCNSphere(radius: 0.1)
-        sunNode.geometry = sunSphere
         sunSphere.firstMaterial?.diffuse.contents = UIImage(named:"art.scnassets/sunTexture.jpg")
-        sunNode.addAnimation(spinAnimation(duration: 40), forKey: "spin")
-        sunNode.position = SCNVector3Make(0, 0, -2)
-//        addNorthSouthPoles(node:sunNode)
-        scene.rootNode.addChildNode(sunNode)
+        sunNode.geometry = sunSphere
+        sunNode.rotation = SCNVector4(x: 0.0, y: 1.0, z: 0.0, w: Float.pi * 2)
+//        sunNode.addAnimation(spinAnimation(duration: 40), forKey: "spin")
+        sunNode.position = SCNVector3Make(0, 0, -1)
+        sunNode.light = SCNLight()
+        sunNode.light?.type = .directional
+
+        if usesGeoCentric{
+            // Geocentric POV - no cameras
+            geoCentricPOV.position = SCNVector3Make(0, 0, 0)
+            scene.rootNode.addChildNode(geoCentricPOV)
+            geoCentricPOV.addChildNode(sunNode)
+        }else{
+             scene.rootNode.addChildNode(sunNode)
+        }
+        
+        
         
         
         for body in bodies {
@@ -88,15 +128,15 @@ extension ViewController{
             }
             
             if (node.name == "earth"){
-                
                 earth = node
-                scene.rootNode.addChildNode(node)
-                
+            }
+            
+            if usesGeoCentric{
+               geoCentricPOV.addChildNode(node)
             }else{
                 scene.rootNode.addChildNode(node)
             }
-            
-//            addNorthSouthPoles(node:node)
+
         }
     }
     
